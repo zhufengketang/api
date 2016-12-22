@@ -6,7 +6,7 @@ mongoose.connect('mongodb://127.0.0.1/zhufengketang');
 exports.Course = mongoose.model('Course', new mongoose.Schema({
     title: {type: String, required: false},//课程标题
     author: {type: String, required: false},//课程作者
-    description: {type: String, required: true},//描述
+    description: {type: String, required: false},//描述
     price: {type: Number, required: false},//价格
     start: {type: Date, required: false},//开始时间
     address: {type: String, required: false},//地址
@@ -35,11 +35,11 @@ exports.ImgCode = mongoose.model('ImgCode', new mongoose.Schema({
 },{collection:'img_code'}));
 
 //手机验证码
-exports.MobileCode = mongoose.model('MobileCode', new mongoose.Schema({
+exports.VCode = mongoose.model('VCode', new mongoose.Schema({
     token: {type: String},//token字符串
     code: {type: String},//手机验证码
     expire:Date//过期时间
-},{collection:'mobile_code'}));
+},{collection:'vcode'}));
 
 //Token
 exports.Token = mongoose.model('Token', new mongoose.Schema({

@@ -1,6 +1,6 @@
 var router = require('koa-router')();
 var Order = require('../model').Order;
-
+var checkLogin = require('../ware/auth.js').checkLogin;
 router.get('/order', async(ctx, next) => {
     ctx.body = await getOrders();
 });
@@ -20,13 +20,14 @@ function getOrders() {
  * 路径参数说明
  *    course_id:课程ID
  */
-router.post('/order/:course_id', async(ctx, next) => {
+router.post('/order/:course_id', checkLogin,async(ctx, next) => {
     var course_id = ctx.params.course_id;
-    ctx.body = await buy(course_id);
+    let user_id = ctx.user_id;
+    ctx.body = await buy(course_id,user_id);
 });
 
-function buy(course_id) {
-    return Order.create({course_id}).then(doc => {
+function buy(course_id,user_id) {
+    return Order.create({course_id,user_id}).then(doc => {
         return {code: 0};
     }, error => {
         return {code: 1000, errorMessage: error};

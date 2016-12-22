@@ -4,10 +4,9 @@ const convert = require('koa-convert');
 const router = require('koa-router')();
 const bodyParser = require('koa-bodyparser');
 const logger = require('koa-logger');
-
 app.use(convert(bodyParser()));
 app.use(convert(logger()));
-
+require('./init')();
 var course = require('./routes/course');
 var order = require('./routes/order');
 var user = require('./routes/user');
