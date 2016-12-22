@@ -2,6 +2,11 @@
 
 为珠峰课堂移动端提供后端接口
 
+#### 接口文档
+```
+https://github.com/zhufengketang/app/blob/master/app/domain/api/apidoc.md
+```
+
 ## 开发环境
 
 - Node.js: `7.1.0`
