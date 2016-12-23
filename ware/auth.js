@@ -23,9 +23,9 @@ exports.checkLogin = async (ctx, next) => {
     if (ctx.header.token) {
         const tokenObj = await Token.findOne({token:ctx.header.token});
         if(tokenObj){
-            const user_id = tokenObj.user_id;
-            if(user_id){
-                ctx.user_id = user_id;
+            const user = tokenObj.user;
+            if(user){
+                ctx.user = user;
                 await next();
             }else{
                 ctx.body = {code:201};

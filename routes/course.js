@@ -15,11 +15,12 @@ router.get('/course', async function (ctx, next) {
 
 function getCourses(start, take) {
     let getTotal = Course.count();
-    let course = Course.find().skip(start).limit(take);
+    let course = Course.find({}).skip(start).limit(take);
     return Promise.all([getTotal, course]).then(result => {
-        return {code: 0, data: {total: result[0], course: result[1]}};
+        console.log( result[1]);
+        return {code: 0, data: {total: result[0], courses: result[1]}};
     }, error => {
-        return {code: 1000, data: error};
+        return {code: 1000, courses: error};
     });
 }
 

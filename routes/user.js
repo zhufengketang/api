@@ -7,6 +7,7 @@ var Token = require('../model').Token;
 var VCode = require('../model').VCode;
 var User = require('../model').User;
 let send = require('../sms');
+var uuid = require('uuid');
 var vcode = require('../utils').vcode;
 /**
  * 注册
@@ -22,7 +23,8 @@ router.post('/user',mustHaveToken, async function (ctx, next) {
         password:ctx.request.body.password,
         mobile:ctx.request.body.mobile
     };
-    let result = await VCode.find({token:ctx.header.token,vcode})
+    let result = await VCode.find({token:ctx.header.token,vcode});
+    result = true;//为了测试方便先过滤掉对手机验证码的校验
     if(result){
         result = await User.create(user);
         if(result){
@@ -39,13 +41,13 @@ router.post('/user',mustHaveToken, async function (ctx, next) {
 /**
  * 用户登录
  */
-router.get('/user/indentity',mustHaveToken, async function (ctx, next) {
+router.get('/user/identity',mustHaveToken, async function (ctx, next) {
     let token = ctx.header.token;
     let mobile = ctx.query.mobile;
     let password = ctx.query.password;
     let user = await User.findOne({mobile,password});
     if(user){
-        var result = await Token.update({token},{user_id:user._id});
+        var result = await Token.update({token},{user:user._id});
         ctx.body = {code: 0};
     }else{
         ctx.body = {code: 201};
@@ -67,7 +69,8 @@ router.get('/user/vcode', mustHaveToken, async function (ctx, next) {
     let result =  await ImgCode.find({token:ctx.header.token,code:img_code});
     if(result){
         let code = vcode();
-         result = await send(code,mobile);
+        //result = await send(code,mobile);
+        result == 'success';//先写死
         if(result =='success'){
             result = await VCode.create({token:ctx.header.token,code});
            ctx.body = {code: 0,data:'短信已发送'}
@@ -91,6 +94,12 @@ router.get('/imgcode',mustHaveToken, async function (ctx, next) {
     await ImgCode.create({token:ctx.header.token,code:'9479'});
     ctx.set('Content-Type','image/png');
     ctx.body = await fs.readFileAsync('../public/images/capture.png');
+});
+
+router.get('/token',async function (ctx, next) {
+    var token = uuid.v4();
+    Token.create({token,expire:Date.AfterOneHour()});
+    ctx.body = {code:0,token:token};
 });
 
 module.exports = router;

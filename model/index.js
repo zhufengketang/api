@@ -1,9 +1,11 @@
 var mongoose = require('mongoose');
+var uuid = require('uuid');
 var ObjectId = mongoose.Schema.Types.ObjectId;
 mongoose.Promise = Promise;
-mongoose.connect('mongodb://127.0.0.1/zhufengketang');
+mongoose.connect('mongodb://123.57.223.74/zhufengketang');
 //课程
-exports.Course = mongoose.model('Course', new mongoose.Schema({
+var CourseSchema = new mongoose.Schema({
+    id: {type: ObjectId, required: false},//id
     title: {type: String, required: false},//课程标题
     author: {type: String, required: false},//课程作者
     description: {type: String, required: false},//描述
@@ -11,39 +13,74 @@ exports.Course = mongoose.model('Course', new mongoose.Schema({
     start: {type: Date, required: false},//开始时间
     address: {type: String, required: false},//地址
     image: {type: String, required: false},//图片
+    auth_profile: {type: String, required: false},//老师简介
+    hours: {type: Number, required: false},//课时
     contents: {type: [String], required: false}//图片
-},{collection:'course'}));
+}, {collection: 'course'});
+
+CourseSchema.pre('save', function (next) {
+    this.id = this._id;
+    next();
+});
+exports.Course = mongoose.model('Course', CourseSchema);
 
 //用户
-exports.User = mongoose.model('User', new mongoose.Schema({
-  name:String,//用户名
-  password:String,//密码
-  mobile:String,//手机号
-},{collection:'user'}));
+var UserSchema = new mongoose.Schema({
+    id: {type: ObjectId, required: false},//id
+    name: String,//用户名
+    password: String,//密码
+    mobile: String,//手机号
+}, {collection: 'user'});
+
+UserSchema.pre('save', function (next) {
+    this.id = this._id;
+    next();
+});
+exports.User = mongoose.model('User', UserSchema);
 
 //订单
-exports.Order = mongoose.model('Order', new mongoose.Schema({
-    course_id: {type: ObjectId, ref: 'Course'},//课程
-    user_id: {type: ObjectId, ref: 'User'},//用户
-},{collection:'order'}));
+var OrderSchema = new mongoose.Schema({
+    id: {type: ObjectId, required: false},//id
+    course: {type: ObjectId, ref: 'Course'},//课程
+    user: {type: ObjectId, ref: 'User'},//用户
+    price: Number,//价格
+    paytime: Date,//购买时间
+    status: Number,//订单状态 0-新订单 1-已支付 2-支付失败
+    flowno: String,//外部交易流水号
+    paymethod: String //支付方式 alipay(支付宝) offline(线下) other(其它)
+}, {collection: 'order'});
 
-//图片验证码
-exports.ImgCode = mongoose.model('ImgCode', new mongoose.Schema({
+OrderSchema.pre('save', function (next) {
+    this.id = this._id;
+    next();
+});
+exports.Order = mongoose.model('Order', OrderSchema);
+
+var ImgCodeSchema =  new mongoose.Schema({
     token: {type: String},//token字符串
     code: {type: String},//图片验证码
-    expire:Date//过期时间
-},{collection:'img_code'}));
+    expire: Date//过期时间
+}, {collection: 'img_code'});
 
-//手机验证码
-exports.VCode = mongoose.model('VCode', new mongoose.Schema({
+//图片验证码
+exports.ImgCode = mongoose.model('ImgCode',ImgCodeSchema);
+
+//短信验证码
+var VCodeSchema = new mongoose.Schema({
     token: {type: String},//token字符串
     code: {type: String},//手机验证码
-    expire:Date//过期时间
-},{collection:'vcode'}));
+    expire: Date//过期时间
+}, {collection: 'vcode'});
+
+//手机验证码
+exports.VCode = mongoose.model('VCode',VCodeSchema);
 
 //Token
-exports.Token = mongoose.model('Token', new mongoose.Schema({
-    user_id: {type: ObjectId, ref: 'User'},//此token对应的用户
+var TokenSchema = new mongoose.Schema({
+    id: String,
+    user: {type: ObjectId, ref: 'User'},//此token对应的用户
     token: {type: String},//token字符串
-    expire:Date//过期时间
-},{collection:'token'}));
+    expire: Date//过期时间
+}, {collection: 'token'});
+
+exports.Token = mongoose.model('Token', TokenSchema);
