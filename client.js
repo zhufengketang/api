@@ -6,6 +6,7 @@ var rp = require('request-promise');
 var fs = require('fs');
 var util = require('util');
 var User = require('./model').User;
+var host = 'http://ketang.zhufengpeixun.cn';
 //清空数据库
 function resetDb() {
     return model.Course.remove({})
@@ -23,7 +24,7 @@ function resetDb() {
 }
 function getToken() {
     return rp({
-        uri: 'http://127.0.0.1:2701/token',
+        uri: host+'/token',
         json: true
     }).then(function (body) {
         return body.token;
@@ -36,7 +37,7 @@ function getToken() {
 //获取验证码图片
 async function getImgCode(token){
     return rp({
-        uri: 'http://127.0.0.1:2701/imgcode',
+        uri: host+'/imgcode',
         headers: {
             token
         },
@@ -57,7 +58,7 @@ async function getImgCode(token){
 //获取短信验证码
 async function getVCode(token){
     return rp({
-        uri: 'http://127.0.0.1:2701/user/vcode?mobile=15718856132&type=register&img_code=9479',
+        uri: host+'/user/vcode?mobile=15718856132&type=register&img_code=9479',
         headers: {
             token
         },
@@ -73,7 +74,7 @@ async function getVCode(token){
 //注册用户 user
 async function createUser(token){
     return rp({
-        uri: 'http://127.0.0.1:2701/user',
+        uri: host+'/user',
         method: 'POST',
         body: {
             vcode: "1234",
@@ -98,7 +99,7 @@ async function createUser(token){
 //用户登录
 async function identity(token){
     return rp({
-        uri: 'http://127.0.0.1:2701/user/identity?mobile=15718856132&password=123456',
+        uri: host+'/user/identity?mobile=15718856132&password=123456',
         headers: {
             token
         },
@@ -114,7 +115,7 @@ async function identity(token){
 //发布课程
 async function createCourse(token){
     return rp({
-        uri: 'http://127.0.0.1:2701/course',
+        uri: host+'/course',
         method: 'POST',
         body: {
             title:'node.js实战',
@@ -148,7 +149,7 @@ async function createCourse(token){
 //查看课程
 async function getCourse(token){
     return rp({
-        uri: 'http://127.0.0.1:2701/course',
+        uri: host+'/course',
         headers: {
             token
         },
@@ -165,7 +166,7 @@ async function getCourse(token){
 //下单
 async function createOrder(token,course){
     return rp({
-        uri: `http://127.0.0.1:2701/order/${course._id}`,
+        uri: host+`/order/${course._id}`,
         method: 'POST',
         body: {
             price:3000,
@@ -191,7 +192,7 @@ async function createOrder(token,course){
 //获取用户订单
 async function getOrder(token){
     return rp({
-        uri: 'http://127.0.0.1:2701/order',
+        uri: host+'/order',
         headers: {
             token
         },
