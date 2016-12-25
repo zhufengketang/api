@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node --harmony-async-await   bin/www",
+    "client":"node --harmony-async-await client.js",
     "pm2": "pm2 start bin/run "
   },
   "dependencies": {

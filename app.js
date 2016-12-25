@@ -1,7 +1,6 @@
 const Koa = require('koa');
 const app = new Koa();
 const convert = require('koa-convert');
-const router = require('koa-router')();
 const bodyParser = require('koa-bodyparser');
 const logger = require('koa-logger');
 app.use(convert(bodyParser()));
