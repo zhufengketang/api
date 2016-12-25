@@ -3,9 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <title><%=title%></title>
+    <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
 </head>
 <body>
-<h1><%=title%></h1>
-<div>Welcome to the App</div>
+<div class="container">
+<h1 class="text-center"><%=title%></h1>
+    <div class="row">
+        <button class="btn btn-default btn-lg" type="button">用户登录</button>
+        <div style="margin:20px;"><b>Response is:</b> <span id="token"></span></div>
+    </div>
+
+</div>
+<script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+
+<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+<script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 </body>
+<script>
+    $("button").on("click",function(){
+        $.ajax({
+            url:"/token",
+            dataType:"json",
+            success:function(data){
+               $("#token").text(JSON.stringify(data));
+            }
+        })
+    })
+</script>
 </html>
