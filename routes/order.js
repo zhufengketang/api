@@ -4,7 +4,6 @@ var checkLogin = require('../ware/auth.js').checkLogin;
 router.get('/order',checkLogin,async (ctx, next) => {
     let total = await Order.count({user:ctx.user});
     let orders = await Order.find({user:ctx.user}).populate('course');
-    console.log();
     ctx.body = {code: 0, data: {total, orders}};
 });
 

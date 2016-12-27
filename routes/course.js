@@ -17,7 +17,6 @@ function getCourses(start, take) {
     let getTotal = Course.count();
     let course = Course.find({}).skip(start).limit(take);
     return Promise.all([getTotal, course]).then(result => {
-        console.log( result[1]);
         return {code: 0, data: {total: result[0], courses: result[1]}};
     }, error => {
         return {code: 1000, courses: error};

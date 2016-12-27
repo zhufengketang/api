@@ -8,6 +8,9 @@
         .btn{
             width:200px;
         }
+        .form-group{
+            margin:20px;
+        }
     </style>
 </head>
 <body>
@@ -23,38 +26,161 @@
         <button class="btn btn-primary btn-lg vcode" type="button">short message code</button>
         <div style="margin:20px;"><b>Vcodee response is:</b><span id="vcode"></span></div>
         <hr/>
-        <form class="form-inline" action="/user" method="post" role="form" onsubmit="submitUser(event)">
+        <form class="form-horizontal" id="user" role="form" onsubmit="submitUser(event)">
             <div class="form-group">
-                <label>Vcode</label>
-                <input type="text" name="vcode" class="form-control"/>
+                <label class="control-label col-md-3">Vcode</label>
+                <div class="col-md-6">
+                    <input type="text" name="vcode" class="form-control" value="1234"/>
+                </div>
                 </div>
             <div class="form-group">
-                <label>Name</label>
-                <input type="text" name="name" class="form-control"/>
+                <label class="control-label col-md-3">Name</label>
+                <div class="col-md-6">
+                    <input type="text" name="name" class="form-control" value="珠峰课堂"/>
+                </div>
             </div>
             <div class="form-group">
-                <label>Password</label>
-                <input type="text" name="password" class="form-control"/>
+                <label class="control-label col-md-3">Password</label>
+                <div class="col-md-6">
+                    <input type="text" name="password" class="form-control" value="1234567"/>
+                </div>
             </div>
             <div class="form-group">
-                <label>Mobile phone</label>
-                <input type="text" name="mobile" class="form-control"/>
+                <label class="control-label col-md-3">Mobile phone</label>
+                <div class="col-md-6">
+                    <input type="text" name="mobile" class="form-control" value="13311133333"/>
+                </div>
             </div>
-            <input type="submit" value="创建用户" class="createUser"/>
+            <div class="col-md-12" style="padding-left:0;">
+                <input type="submit" value="创建用户" class="btn btn-primary btn-lg"/>
+            </div>
         </form>
-        <div style="margin:20px;"><b>Create User response is:</b><span id="createUser"></span></div>
+        <div style="margin-top:90px;"><b>Create User response is:</b><span id="createUser"></span></div>
         <hr/>
         <button class="btn btn-primary btn-lg identyUser" type="button">User Indentity</button>
         <div style="margin:20px;"><b>User Identity response is:</b><span id="identyUser"></span></div>
         <hr/>
-        <button class="btn btn-primary btn-lg createCourse" type="button">Create Course</button>
-        <div style="margin:20px;"><b>Create Course response is:</b><span id="createCourse"></span></div>
+        <form  class="form-horizontal" role="form" id="course" onsubmit="submitCourse(event)">
+            <div class="form-group">
+                    <label class="col-md-3 control-label">Course Title</label>
+                <div class="col-md-6">
+                    <input type="text" name="title" class="form-control" value="nodejs实战">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-3 control-label">Author</label>
+                <div class="col-md-6">
+                    <input type="text" name="author" class="form-control" value="老师">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-3 control-label">start time</label>
+                <div class="col-md-6">
+                <input type="text" name="start" class="form-control" value="2016-10-30">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-3 control-label">address</label>
+                <div class="col-md-6">
+                    <input type="text" name="address" class="form-control" value="珠峰">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3">Image address</label>
+                <div class="col-md-6">
+                    <input type="text" name="image" class="form-control" class="http://7xjf2l.com1.z0.glb.clouddn.com/reactnative.png">
+                </div>
+            </div>
+
+            <div class="form-group">
+            <label class="control-label col-md-3">Course duration</label>
+                <div class="col-md-6">
+                    <input type="text" name="hours" class="form-control" value="24">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3">price</label>
+                <div class="col-md-6">
+                    <input type="text" name="price" class="form-control" value="3000.00">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3">Description</label>
+                <div class="col-md-6">
+                    <textarea  name="description" class="form-control" rows="4" cols="30" value="从零开始，循序渐进"></textarea>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3">Author introduction</label>
+                <div class="col-md-6">
+                    <textarea name="auth_profile" class="form-control" rows="4" cols="30"></textarea>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3">Course contents</label>
+                <div class="col-md-6">
+                    <textarea name="contents" class="form-control" rows="4" cols="30"> </textarea>
+                </div>
+            </div>
+            <div class="col-md-12" style="padding-left:0;">
+                <input type="submit" value="创建课程" class="btn btn-primary btn-lg">
+            </div>
+        </form>
+        <div style="margin-top:80px;"><b>Create Course response is:</b><span id="createCourse"></span></div>
         <hr/>
         <button class="btn btn-primary btn-lg getCourse" type="button">Get Course</button>
         <div style="margin:20px;"><b>Get Course response is:</b><span id="getCourse"></span></div>
         <hr/>
-        <button class="btn btn-primary btn-lg createOrder" type="button">Create Order</button>
-        <div style="margin:20px;"><b>Create Order response is:</b><span id="createOrder"></span></div>
+        <form role="form" class="form-horizontal" id="order" onsubmit="submitOrder(event)">
+            <div class="form-group">
+                <label class="control-label col-md-3">Course number</label>
+                <div class="col-md-6">
+                    <input type="text" name="number" class="form-control" value="0">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-3">Price</label>
+                <div class="col-md-6">
+                    <input type="text" name="price" class="form-control" value="3000">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-3">Pay time</label>
+                <div class="col-md-6">
+                    <input type="text" name="paytime" class="form-control" value="2014-12-25">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-3">Status</label>
+                <div class="col-md-6">
+                    <input type="text" name="status" class="form-control" value="0">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-3">Flow Number</label>
+                <div class="col-md-6">
+                    <input type="text" name="flowno" class="form-control" value="pay001">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-3">Payment</label>
+                <div class="col-md-6">
+                    <input type="text" name="paymethod" class="form-control" value="alipay">
+                </div>
+            </div>
+            <div class="col-md-12" style="padding-left:0;">
+                <input type="submit" value="创建订单" class="btn btn-primary btn-lg">
+            </div>
+        </form>
+        <div style="margin:80px;"><b>Create Order response is:</b><span id="createOrder"></span></div>
         <hr/>
         <button class="btn btn-primary btn-lg getOrder" type="button">Get Order</button>
         <div style="margin:20px;"><b>Get Order response is:</b><span id="getOrder"></span></div>
@@ -88,6 +214,28 @@
         }
     }
 
+    function submitUser(event){   //创建用户
+        event.preventDefault()||(event.returnValue=false);//阻止表单提交的页面刷新行为
+        var requestBody = $("#user").serialize();//将表单输入串行化
+        var createUserOpt = getOptions("/user",token,requestBody,"POST","createUser");
+        $.ajax(createUserOpt);
+    }
+
+    function submitCourse(event){
+        event.preventDefault()||(event.returnValue=false);
+        var requestBody = $("#course").serialize();
+        var createCourseOpt = getOptions("/course",token,requestBody,"POST","createCourse");
+        $.ajax(createCourseOpt);
+    }
+
+    function submitOrder(event){
+        event.preventDefault()||(event.returnValue=false);
+        var number = $("[name='number']").val();
+        var requestBody = $("#order").serialize();
+        var createOrderOpt = getOptions(`/order/${courses[number]._id}`,token,requestBody,"POST","createOrder");
+        $.ajax(createOrderOpt);
+    }
+
     var tokenOpt = getOptions("/token",null,null,"GET","token");
     $(".token").on("click",function(){
         $.ajax(tokenOpt);
@@ -96,7 +244,6 @@
 
 
     $(".imgcode").on("click",function(){
-        console.log(token)
         var imgCodeOpt = getOptions("/imgCode",token,null,"GET","imgcode")
         $.ajax(imgCodeOpt);
     })
@@ -108,25 +255,6 @@
         $.ajax(vcodeOpt);
     });
 
-  /*  $(".createUser").on("click",function(){
-        var requestBody ={
-            vcode: "1234",
-            name:"珠峰课堂",
-            password:"123456",
-            mobile:"15718856132"
-        };
-        var createUserOpt = getOptions("/user",token,requestBody,"POST","createUser");
-        $.ajax(createUserOpt);
-    });*/
-
-    function submitUser(event){
-        event.preventDefault();
-        var form = new FormData(event.target);
-        var createUserOpt = getOptions("/user",token,form,"POST","createUser");
-        console.log(createUserOpt)
-        $.ajax(createUserOpt);
-    }
-
 
     $(".identyUser").on("click",function(){
         var requestBody = {mobile:15718856132,password:123456};
@@ -134,27 +262,6 @@
         $.ajax(userIdentityOpt);
     });
 
-    $(".createCourse").on("click",function(){
-        var requestBody =  {
-            title:'node.js实战',
-            author:'老师',
-            description:'从零开始,循序渐进',
-            price: 3000.00,
-            start:"2016-10-30",
-            address: '珠峰',
-            image: 'http://7xjf2l.com1.z0.glb.clouddn.com/reactnative.png',
-            auth_profile:'教师简介',
-            hours: 24,
-            contents: [
-                "1.课程概览",
-                "2.开发环境搭建",
-                "3.node基础",
-                "4.koa2"
-            ],
-        };
-        var createCourseOpt = getOptions("/course",token,requestBody,"POST","createCourse");
-        $.ajax(createCourseOpt);
-    });
 
     var courses=[];
 
@@ -174,28 +281,6 @@
         $.ajax(getCourseOpt);
     });
 
-
-    $(".createOrder").on("click",function(){
-        var createOrderOpt={
-            url: '/order/'+courses[0]._id,
-            type: 'POST',
-            data: {
-                price:3000,
-                paytime:new Date(),
-                status:0,
-                flowno:'pay001',
-                paymethod:'alipay'
-            },
-            headers: {
-                "token":token
-            },
-            dataType:"json",
-            success:function(data){
-                $("#createOrder").text(JSON.stringify(data));
-            }
-        };
-        $.ajax(createOrderOpt);
-    });
 
     $(".getOrder").on("click",function(){
         var getOrderOpt = getOptions("/order",token,null,"GET","getOrder");
