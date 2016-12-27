@@ -1,5 +1,6 @@
 var router = require('koa-router')();
 var Promise = require('bluebird');
+var path = require('path');
 var fs = Promise.promisifyAll(require("fs"));
 var mustHaveToken = require('../ware/auth.js').mustHaveToken;
 var ImgCode = require('../model').ImgCode;
@@ -93,7 +94,8 @@ router.get('/user/vcode', mustHaveToken, async function (ctx, next) {
 router.get('/imgcode',mustHaveToken, async function (ctx, next) {
     await ImgCode.create({token:ctx.header.token,code:'9479'});
     ctx.set('Content-Type','image/png');
-    ctx.body = await fs.readFileAsync('../public/images/capture.png');
+    console.log(path.resolve('public/images/capture.png'));
+    ctx.body = await fs.readFileAsync(path.resolve('public/images/capture.png'));
 });
 
 router.get('/token',async function (ctx, next) {

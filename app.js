@@ -13,12 +13,12 @@ map:{
 }
 }));
 require('./init')();
-var test = require("./routes/index");
+var index = require("./routes/index");
 var course = require('./routes/course');
 var order = require('./routes/order');
 var user = require('./routes/user');
 
-app.use(test.routes(),test.allowedMethods());
+app.use(index.routes(),index.allowedMethods());
 app.use(course.routes(), course.allowedMethods());
 app.use(order.routes(), order.allowedMethods());
 app.use(user.routes(), user.allowedMethods());

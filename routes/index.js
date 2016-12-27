@@ -3,7 +3,7 @@
  */
 var router = require("koa-router")();
 
-router.get("/test",async (ctx,next)=>{
+router.get("/",async (ctx,next)=>{
     await ctx.render("index",{
         title:"Home Page Playground"
     })
