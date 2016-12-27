@@ -23,7 +23,25 @@
         <button class="btn btn-primary btn-lg vcode" type="button">short message code</button>
         <div style="margin:20px;"><b>Vcodee response is:</b><span id="vcode"></span></div>
         <hr/>
-        <button class="btn btn-primary btn-lg createUser" type="button">Create User</button>
+        <form class="form-inline" action="/user" method="post" role="form" onsubmit="submitUser(event)">
+            <div class="form-group">
+                <label>Vcode</label>
+                <input type="text" name="vcode" class="form-control"/>
+                </div>
+            <div class="form-group">
+                <label>Name</label>
+                <input type="text" name="name" class="form-control"/>
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="text" name="password" class="form-control"/>
+            </div>
+            <div class="form-group">
+                <label>Mobile phone</label>
+                <input type="text" name="mobile" class="form-control"/>
+            </div>
+            <input type="submit" value="创建用户" class="createUser"/>
+        </form>
         <div style="margin:20px;"><b>Create User response is:</b><span id="createUser"></span></div>
         <hr/>
         <button class="btn btn-primary btn-lg identyUser" type="button">User Indentity</button>
@@ -62,6 +80,9 @@
                     token = res.token;
                 };
                $(`#${identifier}`).text(JSON.stringify(res));
+            },
+            error:function(XMLHttpRequest,textStatus,error){
+                $(`#${identifier}`).text(XMLHttpRequest.status+'-'+textStatus).css("color","red");
             }
 
         }
@@ -87,7 +108,7 @@
         $.ajax(vcodeOpt);
     });
 
-    $(".createUser").on("click",function(){
+  /*  $(".createUser").on("click",function(){
         var requestBody ={
             vcode: "1234",
             name:"珠峰课堂",
@@ -96,7 +117,15 @@
         };
         var createUserOpt = getOptions("/user",token,requestBody,"POST","createUser");
         $.ajax(createUserOpt);
-    });
+    });*/
+
+    function submitUser(event){
+        event.preventDefault();
+        var form = new FormData(event.target);
+        var createUserOpt = getOptions("/user",token,form,"POST","createUser");
+        console.log(createUserOpt)
+        $.ajax(createUserOpt);
+    }
 
 
     $(".identyUser").on("click",function(){
@@ -140,6 +169,7 @@
                 $("#getCourse").text(JSON.stringify(data));
                 courses = data.data.courses;
             }
+
         };
         $.ajax(getCourseOpt);
     });
