@@ -4,15 +4,43 @@
     <meta charset="UTF-8">
     <title><%=title%></title>
     <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <style>
+        .btn{
+            width:200px;
+        }
+    </style>
 </head>
 <body>
 <div class="container">
 <h1 class="text-center"><%=title%></h1>
     <div class="row">
-        <button class="btn btn-primary btn-lg" type="button">用户登录</button>
-        <div style="margin:20px;"><b>Response is:</b> <span id="token"></span></div>
+        <button class="btn btn-primary btn-lg token" type="button">Get Token</button>
+        <div style="margin:20px;"><b>Token response is:</b> <span id="token"></span></div>
+        <hr/>
+        <button class="btn btn-primary btn-lg imgcode" type="button">Get ImgCode</button>
+        <div style="margin:20px;"><b>ImgCode response is:</b><span id="imgcode"></span></div>
+        <hr/>
+        <button class="btn btn-primary btn-lg vcode" type="button">short message code</button>
+        <div style="margin:20px;"><b>ImgCode response is:</b><span id="vcode"></span></div>
+        <hr/>
+        <button class="btn btn-primary btn-lg createUser" type="button">Create User</button>
+        <div style="margin:20px;"><b>ImgCode response is:</b><span id="createUser"></span></div>
+        <hr/>
+        <button class="btn btn-primary btn-lg identyUser" type="button">User Indentity</button>
+        <div style="margin:20px;"><b>ImgCode response is:</b><span id="identyUser"></span></div>
+        <hr/>
+        <button class="btn btn-primary btn-lg createCourse" type="button">Create Course</button>
+        <div style="margin:20px;"><b>ImgCode response is:</b><span id="createCourse"></span></div>
+        <hr/>
+        <button class="btn btn-primary btn-lg getCourse" type="button">Get Course</button>
+        <div style="margin:20px;"><b>ImgCode response is:</b><span id="getCourse"></span></div>
+        <hr/>
+        <button class="btn btn-primary btn-lg createOrder" type="button">Create Order</button>
+        <div style="margin:20px;"><b>ImgCode response is:</b><span id="createOrder"></span></div>
+        <hr/>
+        <button class="btn btn-primary btn-lg getOrder" type="button">Get Order</button>
+        <div style="margin:20px;"><b>ImgCode response is:</b><span id="getOrder"></span></div>
     </div>
-
 </div>
 <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
 
@@ -20,14 +48,135 @@
 <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 </body>
 <script>
-    $("button").on("click",function(){
-        $.ajax({
-            url:"/token",
+    var token;
+    var getOptions = function(url,tokenStr,requestBody,method,identifier){
+        return {
+            url:url,
+            headers:{
+                "token":tokenStr
+            },
+            data:requestBody,
+            type:method,
+            success:function(res){
+                if (url=="/token") {
+                    token = res.token;
+                };
+               $(`#${identifier}`).text(JSON.stringify(res));
+            }
+
+        }
+    }
+
+    var tokenOpt = getOptions("/token",null,null,"GET","token");
+    $(".token").on("click",function(){
+        $.ajax(tokenOpt);
+    });
+
+
+
+    $(".imgcode").on("click",function(){
+        console.log(token)
+        var imgCodeOpt = getOptions("/imgCode",token,null,"GET","imgcode")
+        $.ajax(imgCodeOpt);
+    })
+
+
+    $(".vcode").on("click",function(){
+        var requestBody = {mobile:15718856132,type:"register",img_code:9479};
+        var vcodeOpt = getOptions("/user/vcode",token,requestBody,"GET","vcode");
+        $.ajax(vcodeOpt);
+    });
+
+    $(".createUser").on("click",function(){
+        var requestBody ={
+            vcode: "1234",
+            name:"珠峰课堂",
+            password:"123456",
+            mobile:"15718856132"
+        };
+        var createUserOpt = getOptions("/user",token,requestBody,"POST","createUser");
+        $.ajax(createUserOpt);
+    });
+
+
+    $(".identyUser").on("click",function(){
+        var requestBody = {mobile:15718856132,password:123456};
+        var userIdentityOpt = getOptions("/user/identity",token,requestBody,"GET","identyUser");
+        $.ajax(userIdentityOpt);
+    });
+
+    $(".createCourse").on("click",function(){
+        var requestBody =  {
+            title:'node.js实战',
+            author:'老师',
+            description:'从零开始,循序渐进',
+            price: 3000.00,
+            start:"2016-10-30",
+            address: '珠峰',
+            image: 'http://7xjf2l.com1.z0.glb.clouddn.com/reactnative.png',
+            auth_profile:'教师简介',
+            hours: 24,
+            contents: [
+                "1.课程概览",
+                "2.开发环境搭建",
+                "3.node基础",
+                "4.koa2"
+            ],
+        };
+        var createCourseOpt = getOptions("/course",token,requestBody,"POST","createCourse");
+        $.ajax(createCourseOpt);
+    });
+
+    var courses=[];
+
+    $(".getCourse").on("click",function(){
+        var getCourseOpt={
+            url: '/course',
+            headers: {
+                "token":token
+            },
             dataType:"json",
             success:function(data){
-               $("#token").text(JSON.stringify(data));
+                $("#getCourse").text(JSON.stringify(data));
+                courses = data.data.courses;
             }
-        })
-    })
+        };
+        $.ajax(getCourseOpt);
+    });
+
+
+    $(".createOrder").on("click",function(){
+        var createOrderOpt={
+            url: '/order/'+courses[0]._id,
+            type: 'POST',
+            data: {
+                price:3000,
+                paytime:new Date(),
+                status:0,
+                flowno:'pay001',
+                paymethod:'alipay'
+            },
+            headers: {
+                "token":token
+            },
+            dataType:"json",
+            success:function(data){
+                $("#createOrder").text(JSON.stringify(data));
+            }
+        };
+        $.ajax(createOrderOpt);
+    });
+
+    $(".getOrder").on("click",function(){
+        var getOrderOpt = getOptions("/order",token,null,"GET","getOrder");
+        $.ajax(getOrderOpt);
+    });
+
+
+
+
+
+
+
 </script>
 </html>
