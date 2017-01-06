@@ -70,8 +70,7 @@ router.get('/user/vcode', mustHaveToken, async function (ctx, next) {
     let result =  await ImgCode.find({token:ctx.header.token,code:img_code});
     if(result){
         let code = vcode();
-        //result = await send(code,mobile);
-        result == 'success';//先写死
+        result = await send(code,mobile);
         if(result =='success'){
             result = await VCode.create({token:ctx.header.token,code});
            ctx.body = {code: 0,data:'短信已发送'}
