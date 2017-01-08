@@ -254,6 +254,7 @@
 
     $(".imgcode").on("click",function(){
         var xhr = new XMLHttpRequest();
+        var imgHolder = $("#imgcode");
         xhr.open("get", "/imgCode", true);
         xhr.responseType = "blob";
         xhr.setRequestHeader('token',token);
@@ -265,7 +266,8 @@
                     window.URL.revokeObjectURL(img.src); // 清除释放
                 };
                 img.src = window.URL.createObjectURL(blob);
-                $('#imgcode').append(img);
+                imgHolder.empty();
+                imgHolder.append(img);
             }
         }
         xhr.send();
