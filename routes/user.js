@@ -2,6 +2,7 @@ var router = require('koa-router')();
 var Promise = require('bluebird');
 var path = require('path');
 var fs = Promise.promisifyAll(require("fs"));
+var ccap = require("ccap");
 var mustHaveToken = require('../ware/auth.js').mustHaveToken;
 var ImgCode = require('../model').ImgCode;
 var Token = require('../model').Token;
@@ -91,10 +92,13 @@ router.get('/user/vcode', mustHaveToken, async function (ctx, next) {
  *   3. 任何需要验证图片的地方从数据库中进行校验
  */
 router.get('/imgcode',mustHaveToken, async function (ctx, next) {
-    await ImgCode.create({token:ctx.header.token,code:'9479'});
-    ctx.set('Content-Type','image/png');
-    console.log(path.resolve('public/images/capture.png'));
-    ctx.body = await fs.readFileAsync(path.resolve('public/images/capture.png'));
+    var captcha = ccap();
+    var codeAry = captcha.get();
+    var codeStr = codeAry[0];
+    var imgBuf = codeAry[1];
+    console.log(codeStr);
+    await ImgCode.create({token:ctx.header.token,code:codeStr});
+    ctx.body = imgBuf;
 });
 
 router.get('/token',async function (ctx, next) {
