@@ -75,7 +75,7 @@ router.get('/user/vcode', mustHaveToken, async function (ctx, next) {
         result = await send(code,mobile);
         if(result =='success'){
             result = await VCode.create({token:ctx.header.token,code});
-           ctx.body = {code: 0,data:'短信已发送'}
+           ctx.body = {code: 0,data:{mobile,img_code,code}}
         }else{
             ctx.body = {code: 1000,data:'注册短信发送失败'}
         }

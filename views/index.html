@@ -6,36 +6,67 @@
     <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <style>
         .btn{
-            width:200px;
+           /* width:200px;*/
         }
         .form-group{
             margin:20px;
+        }
+        .bg{
+            border: 1px solid gray;
+            border-radius: 10px;
+            margin-bottom: 10px;
         }
     </style>
 </head>
 <body>
 <div class="container">
 <h1 class="text-center"><%=title%></h1>
-    <div class="row">
+    <div class="row bg">
        <div class="col-md-12">
-           <div class="alert alert-danger">请注意一定要先获取token后才能使用其他接口</div>
+           <h3>请注意一定要先获取token后才能使用其他接口</h3>
        </div>
     </div>
-    <div class="row">
-        <button class="btn btn-primary btn-lg token" type="button">Get Token</button>
-        <div style="margin:20px;"><b>Token response is:</b> <span id="token"></span></div>
-        <hr/>
-        <button class="btn btn-primary btn-lg imgcode" type="button">Get ImgCode</button>
-        <div style="margin:20px;"><b>ImgCode response is:</b><span id="imgcode"></span></div>
-        <hr/>
-        <button class="btn btn-primary btn-lg vcode" type="button">short message code</button>
-        <div style="margin:20px;"><b>Vcodee response is:</b><span id="vcode"></span></div>
-        <hr/>
+    <div class="row bg">
+        <div class="col-md-12">
+          <button class="btn btn-primary btn-lg token" type="button">Get Token(获取Token)</button>
+          <div style="margin:20px;"><b>响应:</b> <span id="token"></span></div>
+        </div>
+    </div>
+    <div class="row bg">
+        <div class="col-md-12">
+            <button class="btn btn-primary btn-lg imgcode" type="button">Get ImgCode(获取图片验证码)</button>
+            <div style="margin:20px;"><b>响应:</b><span id="imgcode"></span></div>
+        </div>
+    </div>
+    <div class="row bg">
+        <div class="col-md-12">
+            <form class="form-horizontal" id="getVCode" role="form" onsubmit="submitVcode(event)">
+                <div class="form-group">
+                    <label class="control-label col-md-3">手机号</label>
+                    <div class="col-md-6">
+                        <input type="text" id="mobilePhone" name="mobilephone" class="form-control"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-3">图片验证码</label>
+                    <div class="col-md-6">
+                        <input type="text" id="inputImgCode"name="inputImgCode" class="form-control"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="获取短信验证码" class="btn btn-primary btn-lg"/>
+                </div>
+            </form>
+        <div style="margin:20px;"><b>响应:</b><span id="vcode"></span></div>
+        </div>
+    </div>
+    <div class="row bg">
+        <div class="col-md-12">
         <form class="form-horizontal" id="user" role="form" onsubmit="submitUser(event)">
             <div class="form-group">
                 <label class="control-label col-md-3">Vcode</label>
                 <div class="col-md-6">
-                    <input type="text" name="vcode" class="form-control" value="9479"/>
+                    <input type="text" name="vcode" class="form-control" value=""/>
                 </div>
                 </div>
             <div class="form-group">
@@ -47,24 +78,30 @@
             <div class="form-group">
                 <label class="control-label col-md-3">Password</label>
                 <div class="col-md-6">
-                    <input type="text" name="password" class="form-control" value="1234567"/>
+                    <input type="text" name="password" class="form-control" value=""/>
                 </div>
             </div>
             <div class="form-group">
                 <label class="control-label col-md-3">Mobile phone</label>
                 <div class="col-md-6">
-                    <input type="text" name="mobile" class="form-control" value="15718856132"/>
+                    <input type="text" name="mobile" class="form-control" value=""/>
                 </div>
             </div>
             <div class="col-md-12" style="padding-left:0;">
                 <input type="submit" value="创建用户" class="btn btn-primary btn-lg"/>
             </div>
         </form>
-        <div style="margin-top:90px;"><b>Create User response is:</b><span id="createUser"></span></div>
-        <hr/>
+        <div style="margin-top:90px;"><b>响应:</b><span id="createUser"></span></div>
+        </div>
+    </div>
+    <div class="row bg">
+        <div class="col-md-12">
         <button class="btn btn-primary btn-lg identyUser" type="button">User Indentity</button>
-        <div style="margin:20px;"><b>User Identity response is:</b><span id="identyUser"></span></div>
-        <hr/>
+        <div style="margin:20px;"><b>响应:</b><span id="identyUser"></span></div>
+        </div>
+    </div>
+    <div class="row bg">
+        <div class="col-md-12">
         <form  class="form-horizontal" role="form" id="course" onsubmit="submitCourse(event)">
             <div class="form-group">
                     <label class="col-md-3 control-label">Course Title</label>
@@ -139,11 +176,17 @@
                 <input type="submit" value="创建课程" class="btn btn-primary btn-lg">
             </div>
         </form>
-        <div style="margin-top:80px;"><b>Create Course response is:</b><span id="createCourse"></span></div>
-        <hr/>
+        <div style="margin-top:80px;"><b>响应:</b><span id="createCourse"></span></div>
+        </div>
+    </div>
+    <div class="row bg">
+        <div class="col-md-12">
         <button class="btn btn-primary btn-lg getCourse" type="button">Get Course</button>
-        <div style="margin:20px;"><b>Get Course response is:</b><span id="getCourse"></span></div>
-        <hr/>
+        <div style="margin:20px;"><b>响应:</b><span id="getCourse"></span></div>
+        </div>
+    </div>
+    <div class="row bg">
+        <div class="col-md-12">
         <form role="form" class="form-horizontal" id="order" onsubmit="submitOrder(event)">
             <div class="form-group">
                 <label class="control-label col-md-3">Course number</label>
@@ -185,10 +228,14 @@
                 <input type="submit" value="创建订单" class="btn btn-primary btn-lg">
             </div>
         </form>
-        <div style="margin:80px;"><b>Create Order response is:</b><span id="createOrder"></span></div>
-        <hr/>
+        <div style="margin:80px;"><b>响应:</b><span id="createOrder"></span></div>
+        </div>
+    </div>
+    <div class="row bg">
+        <div class="col-md-12">
         <button class="btn btn-primary btn-lg getOrder" type="button">Get Order</button>
-        <div style="margin:20px;"><b>Get Order response is:</b><span id="getOrder"></span></div>
+        <div style="margin:20px;"><b>响应:</b><span id="getOrder"></span></div>
+        </div>
     </div>
 </div>
 <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
@@ -274,11 +321,14 @@
     })
 
 
-    $(".vcode").on("click",function(){
-        var requestBody = {mobile:15718856132,type:"register",img_code:9479};
+    function submitVcode(){
+        event.preventDefault()||(event.returnValue=false);
+        let mobile = document.querySelector('#mobilePhone');
+        let img_code = document.querySelector('#inputImgCode');
+        var requestBody = {mobile:mobile,type:"register",img_code:img_code};
         var vcodeOpt = getOptions("/user/vcode",token,requestBody,"GET","vcode");
         $.ajax(vcodeOpt);
-    });
+    }
 
 
     $(".identyUser").on("click",function(){
