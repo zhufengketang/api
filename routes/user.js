@@ -1,5 +1,6 @@
 var router = require('koa-router')();
 var Promise = require('bluebird');
+let debug = require('debug')('zhufengketang:user');
 var path = require('path');
 var fs = Promise.promisifyAll(require("fs"));
 var ccap = require("ccap");

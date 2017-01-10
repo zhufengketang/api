@@ -1,4 +1,6 @@
 var uuid = require('uuid');
+let util = require('util');
+let debug = require('debug')('zhufengketang:auth');
 var Token  = require('../model').Token;
 /**
  * 必须拥有token,如果没有的话会返回一个新的token
@@ -28,12 +30,15 @@ exports.checkLogin = async (ctx, next) => {
                 ctx.user = user;
                 await next();
             }else{
+                debug('user= '+util.inspect(user));
                 ctx.body = {code:201};
             }
         }else{
+            debug('tokenObj= '+util.inspect(tokenObj));
             ctx.body = {code:201};
         }
     }else{
+        debug('ctx.header.token= '+ctx.header.token);
         ctx.body = {code:201};
     }
 }
