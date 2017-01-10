@@ -40,23 +40,24 @@
     </div>
     <div class="row bg">
         <div class="col-md-12">
-            <form class="form-horizontal" id="getVCode" role="form" onsubmit="submitVcode(event)">
+            <form class="form-horizontal" role="form">
                 <div class="form-group">
                     <label class="control-label col-md-3">手机号</label>
                     <div class="col-md-6">
-                        <input type="text" id="mobilePhone" name="mobilephone" class="form-control"/>
+                        <input type="text" id="mobilePhone" name="mobilePhone" class="form-control"/>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="control-label col-md-3">图片验证码</label>
                     <div class="col-md-6">
-                        <input type="text" id="inputImgCode"name="inputImgCode" class="form-control"/>
+                        <input type="text" id="inputImgCode" name="inputImgCode" class="form-control"/>
                     </div>
                 </div>
                 <div class="form-group">
-                    <input type="submit" value="获取短信验证码" class="btn btn-primary btn-lg"/>
+                    <button class="btn btn-primary btn-lg getVcode" type="button">获取短信验证码</button>
                 </div>
             </form>
+
         <div style="margin:20px;"><b>响应:</b><span id="vcode"></span></div>
         </div>
     </div>
@@ -320,15 +321,13 @@
         xhr.send();
     })
 
-
-    function submitVcode(){
-        event.preventDefault()||(event.returnValue=false);
-        let mobile = document.querySelector('#mobilePhone');
-        let img_code = document.querySelector('#inputImgCode');
+    $(".getVcode").on("click",function(){
+        let mobile = document.querySelector('#mobilePhone').value;
+        let img_code = document.querySelector('#inputImgCode').value;
         var requestBody = {mobile:mobile,type:"register",img_code:img_code};
         var vcodeOpt = getOptions("/user/vcode",token,requestBody,"GET","vcode");
         $.ajax(vcodeOpt);
-    }
+    });
 
 
     $(".identyUser").on("click",function(){
