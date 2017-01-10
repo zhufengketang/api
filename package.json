@@ -22,10 +22,14 @@
     "koa-views": "^5.2.0",
     "mongoose": "^4.7.4",
     "request-promise": "^4.1.1",
+    "sails-mongo": "^0.12.2",
+    "sails-mysql": "^0.11.5",
     "urllib": "^2.19.0",
-    "uuid": "^3.0.1"
+    "uuid": "^3.0.1",
+    "waterline": "^0.11.6"
   },
   "devDependencies": {
-    "request": "^2.79.0"
+    "request": "^2.79.0",
+    "sails-memory": "^0.10.7"
   }
 }
