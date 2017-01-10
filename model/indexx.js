@@ -8,6 +8,7 @@ var config = require("./config");
     identity:"course",
     connection:"mongoConn",
     attributes:{
+        id:{type:"integer",required:false},
         title: {type: "string", required: false},//课程标题
         author: {type: "string", required: false},//课程作者
         description: {type: "string", required: false},//描述
@@ -25,6 +26,7 @@ exports.userCollection = Waterline.Collection.extend({
     entity:"user",
     connection:"mongoConn",
     attributes:{
+        id:"integer",
         name: "string",//用户名
         password: "string",//密码
         mobile: "string",//手机号
@@ -36,12 +38,11 @@ exports.orderCollection = Waterline.Collection.extend({
     entity:"order",
     connection:"mongoConn",
     attributes:{
-        // course: {type: ObjectId, ref: 'Course'},//课程
-        course:{   //---------------这里可能不对
-            model:"course",
+        id:"integer",
+        course:{
+            model:"course"
         },
-        // user: {type: ObjectId, ref: 'User'},//用户
-        user:{   //---------------这里可能不对
+        user:{
             model:"user"
         },
         price: "float",//价格
@@ -71,12 +72,12 @@ exports.vcodeCollection = Waterline.Collection.extend({
         expire: "date"//过期时间
     }
 });
-
 exports.tokenCollection = Waterline.Collection.extend({
     entity:"token",
     connection:"mongoConn",
     attributes:{
-        user: {modle:"user"},//此token对应的用户
+        id:"string",
+        user: {model:"user"},//此token对应的用户
         token: {type: "string"},//token字符串
         expire: "date"//过期时间
     }
