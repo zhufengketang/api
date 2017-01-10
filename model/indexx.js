@@ -1,6 +1,4 @@
-/**
- * Created by weimin on 17-1-9.
- */
+
 var Waterline = require("waterline");
 var config = require("./config");
 
