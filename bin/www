@@ -7,27 +7,38 @@
 var app = require('../app');
 var debug = require('debug')('demo:server');
 var http = require('http');
-
+var waterline = require("../model/config");
 /**
  * Get port from environment and store in Express.
  */
 
 var port = normalizePort(process.env.KETANG_PORT || '2701');
+var server;
 // app.set('port', port);
 
 /**
  * Create HTTP server.
  */
 
-var server = http.createServer(app.callback());
+waterline.orm.initialize(waterline.config,function(err,models){
+ if (err) {
+     console.log("waterline initialization error:",e.message);
+     return;
+ }
+    server = http.createServer(app.callback());
+    app.models = models.collections;
+    app.connections = models.connections;
+    
+    /**
+     * Listen on provided port, on all network interfaces.
+     */
 
-/**
- * Listen on provided port, on all network interfaces.
- */
+    server.listen(port);
+    server.on('error', onError);
+    server.on('listening', onListening);
+});
 
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
+
 
 /**
  * Normalize a port into a number, string, or false.

@@ -1,7 +1,9 @@
 var router = require('koa-router')();
-var Order = require('../model').Order;
 var checkLogin = require('../ware/auth.js').checkLogin;
+var Order;
+
 router.get('/order',checkLogin,async (ctx, next) => {
+    Order = ctx.request.models.order;
     let total = await Order.count({user:ctx.user});
     let orders = await Order.find({user:ctx.user}).populate('course');
     ctx.body = {code: 0, data: {total, orders}};
@@ -14,6 +16,7 @@ router.get('/order',checkLogin,async (ctx, next) => {
  *    course:课程ID
  */
 router.post('/order/:course', checkLogin,async(ctx, next) => {
+    Order = ctx.request.models.order;
     var course = ctx.params.course;
     let user = ctx.user;
     var order = ctx.request.body;

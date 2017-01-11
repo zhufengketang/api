@@ -4,10 +4,7 @@ var path = require('path');
 var fs = Promise.promisifyAll(require("fs"));
 var ccap = require("ccap");
 var mustHaveToken = require('../ware/auth.js').mustHaveToken;
-var ImgCode = require('../model').ImgCode;
-var Token = require('../model').Token;
-var VCode = require('../model').VCode;
-var User = require('../model').User;
+var ImgCode,Token,VCode,User;
 let send = require('../sms');
 var uuid = require('uuid');
 var vcode = require('../utils').vcode;
@@ -19,16 +16,19 @@ var vcode = require('../utils').vcode;
  *   vcode 验证码
  */
 router.post('/user',mustHaveToken, async function (ctx, next) {
+    let {imgcode:ImgCode,token:Token,vcode:VCode,user:User} = ctx.request.models;
     let vcode = ctx.request.body.vcode;
     let user = {
         name:ctx.request.body.name,
         password:ctx.request.body.password,
-        mobile:ctx.request.body.mobile
+        mobile:ctx.request.body.mobile,
+        token:ctx.header.token
     };
     let result = await VCode.find({token:ctx.header.token,vcode});
     result = true;//为了测试方便先过滤掉对手机验证码的校验
     if(result){
         result = await User.create(user);
+        await Token.update({token:result.token},{user:result.id});
         if(result){
             ctx.body = {code: 0};
         }else{
@@ -44,12 +44,13 @@ router.post('/user',mustHaveToken, async function (ctx, next) {
  * 用户登录
  */
 router.get('/user/identity',mustHaveToken, async function (ctx, next) {
+    let {imgcode:ImgCode,token:Token,vcode:VCode,user:User} = ctx.request.models;
     let token = ctx.header.token;
     let mobile = ctx.query.mobile;
     let password = ctx.query.password;
-    let user = await User.findOne({mobile,password});
+    let user = await User.findOne([{mobile},{password}]);
     if(user){
-        var result = await Token.update({token},{user:user._id});
+        var result = await Token.update({token},{user:user.id});
         ctx.body = {code: 0};
     }else{
         ctx.body = {code: 201};
@@ -66,6 +67,7 @@ router.get('/user/identity',mustHaveToken, async function (ctx, next) {
  *    http://localhost:3000/user/vcode?mobile=15718856132&img_code=9479
  */
 router.get('/user/vcode', mustHaveToken, async function (ctx, next) {
+    let {imgcode:ImgCode,token:Token,vcode:VCode,user:User} = ctx.request.models;
     let mobile = ctx.query.mobile;
     let img_code = ctx.query.img_code;
     let result =  await ImgCode.find({token:ctx.header.token,code:img_code});
@@ -92,18 +94,19 @@ router.get('/user/vcode', mustHaveToken, async function (ctx, next) {
  *   3. 任何需要验证图片的地方从数据库中进行校验
  */
 router.get('/imgcode',mustHaveToken, async function (ctx, next) {
+    let {imgcode:ImgCode,token:Token,vcode:VCode,user:User} = ctx.request.models;
     var captcha = ccap();
     var codeAry = captcha.get();
     var codeStr = codeAry[0];
     var imgBuf = codeAry[1];
-    console.log(codeStr);
     await ImgCode.create({token:ctx.header.token,code:codeStr});
     ctx.body = imgBuf;
 });
 
 router.get('/token',async function (ctx, next) {
+    let {imgcode:ImgCode,token:Token,vcode:VCode,user:User} = ctx.request.models;
     var token = uuid.v4();
-    Token.create({token,expire:Date.AfterOneHour()});
+    await Token.create({token,expire:Date.AfterOneHour()});
     ctx.body = {code:0,token:token};
 });
 

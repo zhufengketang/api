@@ -3,7 +3,8 @@
  */
 var mongoAdapter = require("sails-mongo");
 var mysqlAdapter = require("sails-mysql");
-
+var Waterline = require("waterline");
+var loadedCollection = require("./model");
 var config = {
     adapters:{
         "mysql":mysqlAdapter,
@@ -12,12 +13,18 @@ var config = {
     connections:{
         mongoConn:{
             adapter:"mongo",
-            url:"mongodb://localhost/zhufengketang"
+            url:"mongodb://localhost:27017/zhufengketang"
         }
-    },
-    defaults:{
-        migrate:"safe"
     }
 }
 
-module.exports = config;
+var orm = new Waterline();
+orm.loadCollection(loadedCollection.courseCollection);
+orm.loadCollection(loadedCollection.imgcodeCollection);
+orm.loadCollection(loadedCollection.orderCollection);
+orm.loadCollection(loadedCollection.tokenCollection);
+orm.loadCollection(loadedCollection.userCollection);
+orm.loadCollection(loadedCollection.vcodeCollection);
+
+exports.config = config;
+exports.orm = orm;

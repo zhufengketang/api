@@ -197,7 +197,7 @@
 <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 </body>
 <script>
-    var token;
+    var token,password,mobile;
     var getOptions = function(url,tokenStr,requestBody,method,identifier){
         if(url!="/token" && !token){
             alert('请先获取token');
@@ -226,6 +226,10 @@
     function submitUser(event){   //创建用户
         event.preventDefault()||(event.returnValue=false);//阻止表单提交的页面刷新行为
         var requestBody = $("#user").serialize();//将表单输入串行化
+        password = user.password.value;
+        mobile = user.mobile.value;
+        console.log("password",password);
+        console.log("mobile",mobile);
         var createUserOpt = getOptions("/user",token,requestBody,"POST","createUser");
         $.ajax(createUserOpt);
     }
@@ -241,7 +245,7 @@
         event.preventDefault()||(event.returnValue=false);
         var number = $("[name='number']").val();
         var requestBody = $("#order").serialize();
-        var createOrderOpt = getOptions(`/order/${courses[number]._id}`,token,requestBody,"POST","createOrder");
+        var createOrderOpt = getOptions(`/order/${courses[number].id}`,token,requestBody,"POST","createOrder");
         $.ajax(createOrderOpt);
     }
 
@@ -275,14 +279,14 @@
 
 
     $(".vcode").on("click",function(){
-        var requestBody = {mobile:15718856132,type:"register",img_code:9479};
+        var requestBody = {mobile,type:"register",img_code:9479};
         var vcodeOpt = getOptions("/user/vcode",token,requestBody,"GET","vcode");
         $.ajax(vcodeOpt);
     });
 
 
     $(".identyUser").on("click",function(){
-        var requestBody = {mobile:15718856132,password:123456};
+        var requestBody = {mobile,password};
         var userIdentityOpt = getOptions("/user/identity",token,requestBody,"GET","identyUser");
         $.ajax(userIdentityOpt);
     });

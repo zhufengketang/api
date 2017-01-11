@@ -1,5 +1,5 @@
 var router = require('koa-router')();
-var Course = require('../model').Course;
+var Course;
 /**
  * 获取课程列表
  * URL参数说明
@@ -7,6 +7,7 @@ var Course = require('../model').Course;
  *     take: 总共获取多少个课程
  */
 router.get('/course', async function (ctx, next) {
+    Course = ctx.request.models.course;
     let start = ctx.query.start ? parseInt(ctx.query.start) : 0;
     let take = ctx.query.take ? parseInt(ctx.query.take) : 5;
     ctx.body = await getCourses(start, take);
@@ -28,6 +29,7 @@ function getCourses(start, take) {
  *
  */
 router.post('/course', async function (ctx, next) {
+    Course = ctx.request.models.course;
     ctx.body = await saveCourse(ctx.request.body);
 });
 

@@ -1,11 +1,12 @@
 var uuid = require('uuid');
-var Token  = require('../model').Token;
 /**
  * 必须拥有token,如果没有的话会返回一个新的token
  * @param ctx
  * @param next
  */
+var Token;
 exports.mustHaveToken = async (ctx, next) => {
+    Token = ctx.request.models.token;
     if (ctx.header.token) {
         await next();
     }else{
@@ -20,10 +21,12 @@ exports.mustHaveToken = async (ctx, next) => {
  * @param next
  */
 exports.checkLogin = async (ctx, next) => {
+    Token = ctx.request.models.token;
     if (ctx.header.token) {
         const tokenObj = await Token.findOne({token:ctx.header.token});
         if(tokenObj){
             const user = tokenObj.user;
+            console.log(tokenObj);
             if(user){
                 ctx.user = user;
                 await next();

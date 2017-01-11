@@ -2,11 +2,12 @@
 var Waterline = require("waterline");
 var config = require("./config");
 
+
  exports.courseCollection = Waterline.Collection.extend({
     identity:"course",
     connection:"mongoConn",
     attributes:{
-        id:{type:"integer",required:false},
+        id:{type:"integer",primaryKey:true},
         title: {type: "string", required: false},//课程标题
         author: {type: "string", required: false},//课程作者
         description: {type: "string", required: false},//描述
@@ -16,24 +17,26 @@ var config = require("./config");
         image: {type: "string", required: false},//图片
         auth_profile: {type: "string", required: false},//老师简介
         hours: {type: "float", required: false},//课时
-        contents: {type: "array", required: false}//图片
+        contents: {type: "array", required: false},//图片
     }
 });
 
 exports.userCollection = Waterline.Collection.extend({
-    entity:"user",
+    identity:"user",
     connection:"mongoConn",
     attributes:{
-        id:"integer",
+        id:{type:"integer",primaryKey:true},
         name: "string",//用户名
         password: "string",//密码
         mobile: "string",//手机号
+        token:{
+            model:"token"
+        }
     }
-
 });
 
 exports.orderCollection = Waterline.Collection.extend({
-    entity:"order",
+    identity:"order",
     connection:"mongoConn",
     attributes:{
         id:"integer",
@@ -52,7 +55,7 @@ exports.orderCollection = Waterline.Collection.extend({
 });
 
 exports.imgcodeCollection = Waterline.Collection.extend({
-    entity:"imgcode",
+    identity:"imgcode",
     connection:"mongoConn",
     attributes:{
         token: "string",//token字符串
@@ -62,7 +65,7 @@ exports.imgcodeCollection = Waterline.Collection.extend({
 });
 
 exports.vcodeCollection = Waterline.Collection.extend({
-    entity:"vcode",
+    identity:"vcode",
     connection:"mongoConn",
     attributes:{
         token: {type: "string"},//token字符串
@@ -71,15 +74,16 @@ exports.vcodeCollection = Waterline.Collection.extend({
     }
 });
 exports.tokenCollection = Waterline.Collection.extend({
-    entity:"token",
+    identity:"token",
     connection:"mongoConn",
     attributes:{
-        id:"string",
+        id:{type:"integre",primaryKey:true},
         user: {model:"user"},//此token对应的用户
         token: {type: "string"},//token字符串
         expire: "date"//过期时间
     }
 });
+
 
 
 
