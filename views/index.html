@@ -228,8 +228,6 @@
         var requestBody = $("#user").serialize();//将表单输入串行化
         password = user.password.value;
         mobile = user.mobile.value;
-        console.log("password",password);
-        console.log("mobile",mobile);
         var createUserOpt = getOptions("/user",token,requestBody,"POST","createUser");
         $.ajax(createUserOpt);
     }

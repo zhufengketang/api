@@ -1,6 +1,5 @@
 
 var Waterline = require("waterline");
-var config = require("./config");
 
 
  exports.courseCollection = Waterline.Collection.extend({
@@ -17,7 +16,7 @@ var config = require("./config");
         image: {type: "string", required: false},//图片
         auth_profile: {type: "string", required: false},//老师简介
         hours: {type: "float", required: false},//课时
-        contents: {type: "array", required: false},//图片
+        contents: {type: "array", required: false}//图片
     }
 });
 
@@ -77,7 +76,7 @@ exports.tokenCollection = Waterline.Collection.extend({
     identity:"token",
     connection:"mongoConn",
     attributes:{
-        id:{type:"integre",primaryKey:true},
+        id:{type:"integer",primaryKey:true},
         user: {model:"user"},//此token对应的用户
         token: {type: "string"},//token字符串
         expire: "date"//过期时间

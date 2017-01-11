@@ -4,7 +4,6 @@ var path = require('path');
 var fs = Promise.promisifyAll(require("fs"));
 var ccap = require("ccap");
 var mustHaveToken = require('../ware/auth.js').mustHaveToken;
-var ImgCode,Token,VCode,User;
 let send = require('../sms');
 var uuid = require('uuid');
 var vcode = require('../utils').vcode;

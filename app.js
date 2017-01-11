@@ -14,7 +14,6 @@ map:{
 }));
 app.use(async (ctx,next)=>{
     ctx.request.models = app.models;
-    ctx.request.connections = app.connections;
     await next();
 });
 require('./init')();
