@@ -47,7 +47,7 @@ router.get('/user/identity',mustHaveToken, async function (ctx, next) {
     let token = ctx.header.token;
     let mobile = ctx.query.mobile;
     let password = ctx.query.password;
-    let user = await User.findOne([{mobile},{password}]);
+    let user = await User.findOne({mobile,password});
     if(user){
         var result = await Token.update({token},{user:user.id});
         ctx.body = {code: 0};
