@@ -16,10 +16,11 @@ var port = normalizePort(process.env.KETANG_PORT || '2701');
 var server;
 // app.set('port', port);
 
-/**
- * Create HTTP server.
- */
 
+/*1.initialize database
+  2.get the models in the database
+  3.start server and listen to port
+* */
 waterline.orm.initialize(waterline.config,function(err,models){
  if (err) {
      console.log("waterline initialization error:",e.message);
