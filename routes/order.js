@@ -3,7 +3,7 @@ var Order = require('../model').Order;
 var checkLogin = require('../ware/auth.js').checkLogin;
 router.get('/order',checkLogin,async (ctx, next) => {
     let total = await Order.count({user:ctx.user});
-    let orders = await Order.find({user:ctx.user}).populate('course');
+    let orders = await Order.find({user:ctx.user}).sort({paytime:-1}).populate('course');
     ctx.body = {code: 0, data: {total, orders}};
 });
 
@@ -21,7 +21,6 @@ router.post('/order/:course', checkLogin,async(ctx, next) => {
         course:course,
         user:user,
         price:order.price,
-        paytime:order.paytime,
         status:order.status,
         flowno:order.flowno,
         paymethod:order.paymethod

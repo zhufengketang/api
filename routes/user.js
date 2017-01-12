@@ -12,6 +12,9 @@ var User = require('../model').User;
 let send = require('../sms');
 var uuid = require('uuid');
 var vcode = require('../utils').vcode;
+let crypto = require('crypto');
+var app_secret=process.env.secret || "zhufengketang";
+
 /**
  * 注册
  *   name 姓名
@@ -21,20 +24,27 @@ var vcode = require('../utils').vcode;
  */
 router.post('/user',mustHaveToken, async function (ctx, next) {
     let vcode = ctx.request.body.vcode;
+    var password=crypto.createHmac('sha1', app_secret).update(ctx.request.body.password).digest('base64');
     let user = {
         name:ctx.request.body.name,
-        password:ctx.request.body.password,
+        password,
         mobile:ctx.request.body.mobile
     };
+
     let result = await VCode.find({token:ctx.header.token,vcode});
-    result = true;//为了测试方便先过滤掉对手机验证码的校验
     if(result){
-        result = await User.create(user);
-        if(result){
-            ctx.body = {code: 0};
+        let existUser = await User.findOne({mobile:user.mobile});
+        if(existUser){
+            ctx.body = {code: 1000,errorMessage:"该手机号已经被注册!"};
         }else{
-            ctx.body = {code: 1000,errorMessage:"注册失败"};
+            result = await User.create(user);
+            if(result){
+                ctx.body = {code: 0};
+            }else{
+                ctx.body = {code: 1000,errorMessage:"注册失败"};
+            }
         }
+
     }else{
         ctx.body = {code: 1000,errorMessage:"短信验证码错误或失效"};
     }
@@ -47,11 +57,11 @@ router.post('/user',mustHaveToken, async function (ctx, next) {
 router.get('/user/identity',mustHaveToken, async function (ctx, next) {
     let token = ctx.header.token;
     let mobile = ctx.query.mobile;
-    let password = ctx.query.password;
+    let password=crypto.createHmac('sha1', app_secret).update(ctx.query.password).digest('base64');
     let user = await User.findOne({mobile,password});
     if(user){
         var result = await Token.update({token},{user:user._id});
-        ctx.body = {code: 0};
+        ctx.body = {code: 0,data:user};
     }else{
         ctx.body = {code: 201};
     }

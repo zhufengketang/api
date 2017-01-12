@@ -5,13 +5,15 @@
     <title><%=title%></title>
     <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <style>
-        .btn{
-           /* width:200px;*/
+        .btn {
+            /* width:200px;*/
         }
-        .form-group{
-            margin:20px;
+
+        .form-group {
+            margin: 20px;
         }
-        .bg{
+
+        .bg {
             border: 1px solid gray;
             border-radius: 10px;
             margin-bottom: 10px;
@@ -20,22 +22,22 @@
 </head>
 <body>
 <div class="container">
-<h1 class="text-center"><%=title%></h1>
+    <h1 class="text-center"><%=title%></h1>
     <div class="row bg">
-       <div class="col-md-12">
-           <h3>请注意一定要先获取token后才能使用其他接口</h3>
-       </div>
+        <div class="col-md-12">
+            <h3>请注意一定要先获取token后才能使用其他接口</h3>
+        </div>
     </div>
     <div class="row bg">
         <div class="col-md-12">
-          <button class="btn btn-primary btn-lg token" type="button">Get Token(获取Token)</button>
-          <div style="margin:20px;"><b>响应:</b> <span id="token"></span></div>
+            <button class="btn btn-primary btn-lg token" type="button">Get Token(获取Token)</button>
+            <div style="margin:20px;"><p id="token"></p></div>
         </div>
     </div>
     <div class="row bg">
         <div class="col-md-12">
             <button class="btn btn-primary btn-lg imgcode" type="button">Get ImgCode(获取图片验证码)</button>
-            <div style="margin:20px;"><b>响应:</b><span id="imgcode"></span></div>
+            <div style="margin:20px;"><p id="imgcode"></p></div>
         </div>
     </div>
     <div class="row bg">
@@ -60,184 +62,204 @@
                 </div>
             </form>
 
-        <div style="margin:20px;"><b>响应:</b><span id="vcode"></span></div>
+            <div style="margin:20px;"><p id="vcode"></p></div>
         </div>
     </div>
     <div class="row bg">
         <div class="col-md-12">
-        <form class="form-horizontal" id="user" role="form" onsubmit="submitUser(event)">
-            <div class="form-group">
-                <label class="control-label col-md-3">Vcode</label>
-                <div class="col-md-6">
-                    <input type="text" name="vcode" class="form-control" value=""/>
+            <form class="form-horizontal" id="user" role="form" onsubmit="submitUser(event)">
+                <div class="form-group">
+                    <label class="control-label col-md-3">手机验证码</label>
+                    <div class="col-md-6">
+                        <input type="text" name="vcode" class="form-control" value=""/>
+                    </div>
                 </div>
+                <div class="form-group">
+                    <label class="control-label col-md-3">姓名</label>
+                    <div class="col-md-6">
+                        <input type="text" name="name" class="form-control" value="珠峰课堂"/>
+                    </div>
                 </div>
-            <div class="form-group">
-                <label class="control-label col-md-3">Name</label>
-                <div class="col-md-6">
-                    <input type="text" name="name" class="form-control" value="珠峰课堂"/>
+                <div class="form-group">
+                    <label class="control-label col-md-3">密码</label>
+                    <div class="col-md-6">
+                        <input type="text" name="password" class="form-control" value=""/>
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <label class="control-label col-md-3">Password</label>
-                <div class="col-md-6">
-                    <input type="text" name="password" class="form-control" value=""/>
+                <div class="form-group">
+                    <label class="control-label col-md-3">手机号</label>
+                    <div class="col-md-6">
+                        <input type="text" name="mobile" class="form-control" value=""/>
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <label class="control-label col-md-3">Mobile phone</label>
-                <div class="col-md-6">
-                    <input type="text" name="mobile" class="form-control" value=""/>
+                <div class="col-md-12" style="padding-left:0;">
+                    <input type="submit" value="创建用户" class="btn btn-primary btn-lg"/>
                 </div>
-            </div>
-            <div class="col-md-12" style="padding-left:0;">
-                <input type="submit" value="创建用户" class="btn btn-primary btn-lg"/>
-            </div>
-        </form>
-        <div style="margin-top:90px;"><b>响应:</b><span id="createUser"></span></div>
+            </form>
+            <div style="margin-top:90px;"><p id="createUser"></p></div>
         </div>
     </div>
     <div class="row bg">
         <div class="col-md-12">
-        <button class="btn btn-primary btn-lg identyUser" type="button">User Indentity</button>
-        <div style="margin:20px;"><b>响应:</b><span id="identyUser"></span></div>
+            <form class="form-horizontal" id="identityForm" role="form" onsubmit="submitIdentity(event)">
+                <div class="form-group">
+                    <label class="col-md-3 control-label">手机号</label>
+                    <div class="col-md-6">
+                        <input type="text" name="mobile" class="form-control" value="">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label">密码</label>
+                    <div class="col-md-6">
+                        <input type="text" name="password" class="form-control" value="">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-3 col-md-6">
+                        <input type="submit" value="登录" class="btn btn-primary btn-lg"/>
+                    </div>
+                </div>
+            </form>
+            <div style="margin:20px;"><p id="identyUser"></p></div>
         </div>
     </div>
     <div class="row bg">
         <div class="col-md-12">
-        <form  class="form-horizontal" role="form" id="course" onsubmit="submitCourse(event)">
-            <div class="form-group">
-                    <label class="col-md-3 control-label">Course Title</label>
-                <div class="col-md-6">
-                    <input type="text" name="title" class="form-control" value="nodejs实战">
+            <form class="form-horizontal" role="form" id="course" onsubmit="submitCourse(event)">
+                <div class="form-group">
+                    <label class="col-md-3 control-label">标题</label>
+                    <div class="col-md-6">
+                        <input type="text" name="title" class="form-control" value="nodejs实战">
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group">
-                <label class="col-md-3 control-label">Author</label>
-                <div class="col-md-6">
-                    <input type="text" name="author" class="form-control" value="老师">
+                <div class="form-group">
+                    <label class="col-md-3 control-label">引用用户表主键</label>
+                    <div class="col-md-6">
+                        <input type="text" name="author" class="form-control" value="">
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group">
-                <label class="col-md-3 control-label">start time</label>
-                <div class="col-md-6">
-                <input type="text" name="start" class="form-control" value="2016-10-30">
+                <div class="form-group">
+                    <label class="col-md-3 control-label">开课时间</label>
+                    <div class="col-md-6">
+                        <input type="text" name="start" class="form-control" value="2016-10-30">
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group">
-                <label class="col-md-3 control-label">address</label>
-                <div class="col-md-6">
-                    <input type="text" name="address" class="form-control" value="珠峰">
+                <div class="form-group">
+                    <label class="col-md-3 control-label">上课地址</label>
+                    <div class="col-md-6">
+                        <input type="text" name="address" class="form-control" value="珠峰">
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group">
-                <label class="control-label col-md-3">Image address</label>
-                <div class="col-md-6">
-                    <input type="text" name="image" class="form-control" class="http://7xjf2l.com1.z0.glb.clouddn.com/reactnative.png">
+                <div class="form-group">
+                    <label class="control-label col-md-3">图片地址</label>
+                    <div class="col-md-6">
+                        <input type="text" name="image" class="form-control"
+                               class="http://7xjf2l.com1.z0.glb.clouddn.com/reactnative.png">
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group">
-            <label class="control-label col-md-3">Course duration</label>
-                <div class="col-md-6">
-                    <input type="text" name="hours" class="form-control" value="24">
+                <div class="form-group">
+                    <label class="control-label col-md-3">课时</label>
+                    <div class="col-md-6">
+                        <input type="text" name="hours" class="form-control" value="24">
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group">
-                <label class="control-label col-md-3">price</label>
-                <div class="col-md-6">
-                    <input type="text" name="price" class="form-control" value="3000.00">
+                <div class="form-group">
+                    <label class="control-label col-md-3">价格</label>
+                    <div class="col-md-6">
+                        <input type="text" name="price" class="form-control" value="3000.00">
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group">
-                <label class="control-label col-md-3">Description</label>
-                <div class="col-md-6">
-                    <textarea  name="description" class="form-control" rows="4" cols="30" value="从零开始，循序渐进"></textarea>
+                <div class="form-group">
+                    <label class="control-label col-md-3">描述</label>
+                    <div class="col-md-6">
+                        <textarea name="description" class="form-control" rows="4" cols="30"
+                                  value="从零开始，循序渐进"></textarea>
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group">
-                <label class="control-label col-md-3">Author introduction</label>
-                <div class="col-md-6">
-                    <textarea name="auth_profile" class="form-control" rows="4" cols="30"></textarea>
+                <div class="form-group">
+                    <label class="control-label col-md-3">讲师介绍</label>
+                    <div class="col-md-6">
+                        <textarea name="auth_profile" class="form-control" rows="4" cols="30"></textarea>
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group">
-                <label class="control-label col-md-3">Course contents</label>
-                <div class="col-md-6">
-                    <textarea name="contents" class="form-control" rows="4" cols="30"> </textarea>
+                <div class="form-group">
+                    <label class="control-label col-md-3">课程内容</label>
+                    <div class="col-md-6">
+                        <textarea name="contents" class="form-control" rows="4" cols="30"> </textarea>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-12" style="padding-left:0;">
-                <input type="submit" value="创建课程" class="btn btn-primary btn-lg">
-            </div>
-        </form>
-        <div style="margin-top:80px;"><b>响应:</b><span id="createCourse"></span></div>
+                <div class="col-md-12" style="padding-left:0;">
+                    <input type="submit" value="创建课程" class="btn btn-primary btn-lg">
+                </div>
+            </form>
+            <div style="margin-top:80px;"><p id="createCourse"></p></div>
         </div>
     </div>
     <div class="row bg">
         <div class="col-md-12">
-        <button class="btn btn-primary btn-lg getCourse" type="button">Get Course</button>
-        <div style="margin:20px;"><b>响应:</b><span id="getCourse"></span></div>
+            <button class="btn btn-primary btn-lg getCourse" type="button">获取课程</button>
+            <div style="margin:20px;"><p id="getCourse"></p></div>
         </div>
     </div>
     <div class="row bg">
         <div class="col-md-12">
-        <form role="form" class="form-horizontal" id="order" onsubmit="submitOrder(event)">
-            <div class="form-group">
-                <label class="control-label col-md-3">Course number</label>
-                <div class="col-md-6">
-                    <input type="text" name="number" class="form-control" value="0">
+            <form role="form" class="form-horizontal" id="order" onsubmit="submitOrder(event)">
+                <div class="form-group">
+                    <label class="control-label col-md-3">课程ID</label>
+                    <div class="col-md-6">
+                        <input type="text" name="course" class="form-control" value="0">
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <label class="control-label col-md-3">Price</label>
-                <div class="col-md-6">
-                    <input type="text" name="price" class="form-control" value="3000">
+                <div class="form-group">
+                    <label class="control-label col-md-3">价格</label>
+                    <div class="col-md-6">
+                        <input type="text" name="price" class="form-control" value="3000">
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <label class="control-label col-md-3">Pay time</label>
-                <div class="col-md-6">
-                    <input type="text" name="paytime" class="form-control" value="2014-12-25">
+                <div class="form-group">
+                    <label class="control-label col-md-3">付款时间</label>
+                    <div class="col-md-6">
+                        <input type="text" name="paytime" class="form-control" value="2014-12-25">
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <label class="control-label col-md-3">Status</label>
-                <div class="col-md-6">
-                    <input type="text" name="status" class="form-control" value="0">
+                <div class="form-group">
+                    <label class="control-label col-md-3">状态</label>
+                    <div class="col-md-6">
+                        <input type="text" name="status" class="form-control" value="0">
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <label class="control-label col-md-3">Flow Number</label>
-                <div class="col-md-6">
-                    <input type="text" name="flowno" class="form-control" value="pay001">
+                <div class="form-group">
+                    <label class="control-label col-md-3">流水号</label>
+                    <div class="col-md-6">
+                        <input type="text" name="flowno" class="form-control" value="pay001">
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <label class="control-label col-md-3">Payment</label>
-                <div class="col-md-6">
-                    <input type="text" name="paymethod" class="form-control" value="alipay">
+                <div class="form-group">
+                    <label class="control-label col-md-3">付款方式</label>
+                    <div class="col-md-6">
+                        <input type="text" name="paymethod" class="form-control" value="alipay">
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-12" style="padding-left:0;">
-                <input type="submit" value="创建订单" class="btn btn-primary btn-lg">
-            </div>
-        </form>
-        <div style="margin:80px;"><b>响应:</b><span id="createOrder"></span></div>
+                <div class="col-md-12" style="padding-left:0;">
+                    <input type="submit" value="创建订单" class="btn btn-primary btn-lg">
+                </div>
+            </form>
+            <div style="margin:80px;"><p id="createOrder"></p></div>
         </div>
     </div>
     <div class="row bg">
         <div class="col-md-12">
-        <button class="btn btn-primary btn-lg getOrder" type="button">Get Order</button>
-        <div style="margin:20px;"><b>响应:</b><span id="getOrder"></span></div>
+            <button class="btn btn-primary btn-lg getOrder" type="button">获取订单</button>
+            <div style="margin:20px;"><p id="getOrder"></p></div>
         </div>
     </div>
 </div>
@@ -247,72 +269,78 @@
 <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 </body>
 <script>
+    //当前的token
     var token;
-    var getOptions = function(url,tokenStr,requestBody,method,identifier){
-        if(url!="/token" && !token){
+    //获取参数
+    var getOptions = function (url, tokenStr, requestBody, method, identifier) {
+        if (url != "/token" && !token) {
             alert('请先获取token');
             return null;
         }
         return {
-            url:url,
-            headers:{
-                "token":tokenStr
+            url: url,
+            headers: {
+                "token": tokenStr
             },
-            data:requestBody,
-            type:method,
-            success:function(res){
-                if (url=="/token") {
+            data: requestBody,
+            type: method,
+            success: function (res) {
+                if (url == "/token") {
                     token = res.token;
-                };
-               $(`#${identifier}`).text(JSON.stringify(res));
+                }
+                let str = JSON.stringify(res, null, 4);
+                $(`#${identifier}`).html(str);
             },
-            error:function(XMLHttpRequest,textStatus,error){
-                $(`#${identifier}`).text(XMLHttpRequest.status+'-'+textStatus).css("color","red");
+            error: function (XMLHttpRequest, textStatus, error) {
+                $(`#${identifier}`).text(XMLHttpRequest.status + '-' + textStatus).css("color", "red");
             }
 
         }
     }
 
-    function submitUser(event){   //创建用户
-        event.preventDefault()||(event.returnValue=false);//阻止表单提交的页面刷新行为
+    //注册用户
+    function submitUser(event) {   //创建用户
+        event.preventDefault() || (event.returnValue = false);//阻止表单提交的页面刷新行为
         var requestBody = $("#user").serialize();//将表单输入串行化
-        var createUserOpt = getOptions("/user",token,requestBody,"POST","createUser");
+        var createUserOpt = getOptions("/user", token, requestBody, "POST", "createUser");
         $.ajax(createUserOpt);
     }
 
-    function submitCourse(event){
-        event.preventDefault()||(event.returnValue=false);
+    //添加课程
+    function submitCourse(event) {
+        event.preventDefault() || (event.returnValue = false);
         var requestBody = $("#course").serialize();
-        var createCourseOpt = getOptions("/course",token,requestBody,"POST","createCourse");
+        var createCourseOpt = getOptions("/course", token, requestBody, "POST", "createCourse");
         $.ajax(createCourseOpt);
     }
 
-    function submitOrder(event){
-        event.preventDefault()||(event.returnValue=false);
-        var number = $("[name='number']").val();
+    //提交订单
+    function submitOrder(event) {
+        event.preventDefault() || (event.returnValue = false);
         var requestBody = $("#order").serialize();
-        var createOrderOpt = getOptions(`/order/${courses[number]._id}`,token,requestBody,"POST","createOrder");
+        let course = $("#order").find('input[name=course]').val();
+        console.log('requestBody.course',course);
+        var createOrderOpt = getOptions(`/order/${course}`, token, requestBody, "POST", "createOrder");
         $.ajax(createOrderOpt);
     }
 
-    var tokenOpt = getOptions("/token",null,null,"GET","token");
-    $(".token").on("click",function(){
+    var tokenOpt = getOptions("/token", null, null, "GET", "token");
+    $(".token").on("click", function () {
         $.ajax(tokenOpt);
     });
 
 
-
-    $(".imgcode").on("click",function(){
+    $(".imgcode").on("click", function () {
         var xhr = new XMLHttpRequest();
         var imgHolder = $("#imgcode");
         xhr.open("get", "/imgCode", true);
         xhr.responseType = "blob";
-        xhr.setRequestHeader('token',token);
-        xhr.onload = function() {
+        xhr.setRequestHeader('token', token);
+        xhr.onload = function () {
             if (this.status == 200) {
                 var blob = this.response;
                 var img = document.createElement("img");
-                img.onload = function(e) {
+                img.onload = function (e) {
                     window.URL.revokeObjectURL(img.src); // 清除释放
                 };
                 img.src = window.URL.createObjectURL(blob);
@@ -323,32 +351,38 @@
         xhr.send();
     })
 
-    $(".getVcode").on("click",function(){
+    $(".getVcode").on("click", function () {
         let mobile = document.querySelector('#mobilePhone').value;
         let img_code = document.querySelector('#inputImgCode').value;
-        var requestBody = {mobile:mobile,type:"register",img_code:img_code};
-        var vcodeOpt = getOptions("/user/vcode",token,requestBody,"GET","vcode");
+        var requestBody = {mobile: mobile, type: "register", img_code: img_code};
+        var vcodeOpt = getOptions("/user/vcode", token, requestBody, "GET", "vcode");
         $.ajax(vcodeOpt);
     });
 
 
-    $(".identyUser").on("click",function(){
-        var requestBody = {mobile:15718856132,password:123456};
-        var userIdentityOpt = getOptions("/user/identity",token,requestBody,"GET","identyUser");
+    function submitIdentity() {
+        event.preventDefault() || (event.returnValue = false);
+        let identityForm = document.querySelector('#identityForm');
+        let mobile = $('#identityForm').find('input[name=mobile]').val();
+        let password = $('#identityForm').find('input[name=password]').val();
+        var requestBody = {mobile, password};
+        var userIdentityOpt = getOptions("/user/identity", token, requestBody, "GET", "identyUser");
         $.ajax(userIdentityOpt);
-    });
+    }
 
 
-    var courses=[];
+    var courses = [];
 
-    $(".getCourse").on("click",function(){
-        var getCourseOpt={
-            url: '/course',
+    $(".getCourse").on("click", function () {
+        let start = 0;
+        let take = 100;
+        var getCourseOpt = {
+            url: `/course?start=${start}&take=${take}`,
             headers: {
-                "token":token
+                "token": token
             },
-            dataType:"json",
-            success:function(data){
+            dataType: "json",
+            success: function (data) {
                 $("#getCourse").text(JSON.stringify(data));
                 courses = data.data.courses;
             }
@@ -358,8 +392,8 @@
     });
 
 
-    $(".getOrder").on("click",function(){
-        var getOrderOpt = getOptions("/order",token,null,"GET","getOrder");
+    $(".getOrder").on("click", function () {
+        var getOrderOpt = getOptions("/order", token, null, "GET", "getOrder");
         $.ajax(getOrderOpt);
     });
 

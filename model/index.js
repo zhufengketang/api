@@ -13,9 +13,10 @@ var CourseSchema = new mongoose.Schema({
     start: {type: Date, required: false},//开始时间
     address: {type: String, required: false},//地址
     image: {type: String, required: false},//图片
-    auth_profile: {type: String, required: false},//老师简介
+    author_profile: {type: String, required: false},//老师简介
     hours: {type: Number, required: false},//课时
-    contents: {type: [String], required: false}//图片
+    contents: {type: [String], required: false},//图片
+    weight:{type:Number,default:0}
 }, {collection: 'course'});
 
 CourseSchema.pre('save', function (next) {
@@ -44,7 +45,7 @@ var OrderSchema = new mongoose.Schema({
     course: {type: ObjectId, ref: 'Course'},//课程
     user: {type: ObjectId, ref: 'User'},//用户
     price: Number,//价格
-    paytime: Date,//购买时间
+    paytime: {type:Date,default:Date.now},//购买时间
     status: Number,//订单状态 0-新订单 1-已支付 2-支付失败
     flowno: String,//外部交易流水号
     paymethod: String //支付方式 alipay(支付宝) offline(线下) other(其它)

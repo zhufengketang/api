@@ -15,7 +15,7 @@ router.get('/course', async function (ctx, next) {
 
 function getCourses(start, take) {
     let getTotal = Course.count();
-    let course = Course.find({}).skip(start).limit(take);
+    let course = Course.find({}).sort({weight:-1}).skip(start).limit(take);
     return Promise.all([getTotal, course]).then(result => {
         return {code: 0, data: {total: result[0], courses: result[1]}};
     }, error => {
