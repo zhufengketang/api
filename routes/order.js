@@ -11,14 +11,25 @@ router.get('/order',checkLogin,async (ctx, next) => {
 //参考文章  http://www.jb51.net/article/102190.htm
 //参考文档 https://doc.open.alipay.com/docs/doc.htm?spm=a219a.7629140.0.0.nNOmiW&treeId=204&articleId=105297&docType=1
 router.post('/order/sign/alipay', checkLogin,async(ctx, next) => {
-    let alipayConfig = req.query;
+    let orderId = req.query.orderId;
+    let orderVo = await Order.findById(orderId).populate('course');
+    let alipayConfig = {
+        subject:orderVo.course.name,
+        body:orderVo.course.description,
+        totalFee:orderVo.course.price,
+        notifyURL:'https://ketang.zhufengpeixun.cn/order/notice',
+        service:"mobile.securitypay.pay",
+        paymentType:"1",
+        inputCharse:"utf-8",
+        itBPay:"30m",
+        showURL:"m.alipay.com"
+    };
     var code = ""
     for(var i = 0; i < 4; i++) {
         code += Math.floor(Math.random() * 10);
     }
     //订单号暂时由时间戳与四位随机码生成
     alipayConfig.out_trade_no = Date.now().toString() + code;
-    alipayConfig.notifyURL = 'https://ketang.zhufengpeixun.cn/order/notice';
     var orderSpec = getParams(alipayConfig);
     var sign = getSign(alipayConfig)
     ctx.body = {
@@ -106,26 +117,9 @@ function veriySign(params) {
     }
 }
 
-
-//验签
-function veriySign(params) {
-    try {
-        var publicPem = fs.readFileSync('./rsa_public_key.pem');
-        var publicKey = publicPem.toString();
-        var prestr = getVerifyParams(params);
-        var sign = params['sign'] ? params['sign'] : "";
-        var verify = crypto.createVerify('RSA-SHA1');
-        verify.update(prestr);
-        return verify.verify(publicKey, sign, 'base64')
-
-    } catch(err) {
-        console.log('veriSign err', err)
-    }
-}
-
-
+//收款通知
 router.post('/order/notice', checkLogin,async(ctx, next) => {
-    var params = req.body
+    var params = req.body;
     var mysign = veriySign(params);
     //验证支付宝签名mysign为true表示签名正确
     try {
@@ -173,7 +167,7 @@ router.post('/order/:course', checkLogin,async(ctx, next) => {
 
 function buy(course) {
     return Order.create(course).then(doc => {
-        return {code: 0};
+        return {code: 0,data:doc._id};
     }, error => {
         return {code: 1000, errorMessage: error};
     });
