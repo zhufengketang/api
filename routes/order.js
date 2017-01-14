@@ -162,17 +162,17 @@ router.post('/order/:courseId', checkLogin,async(ctx, next) => {
     var courseId = ctx.params.courseId;
     let userId=ctx.user;
     let courseOrderedCount=await Order.count({user:userId,course:courseId}); //按用户和课程查询订单，确认是否重复
-    if(courseOrderedCount>0)
-        ctx.body={code:1000,errorMessage:"the user have order the course before"};
-    else{
+    //if(courseOrderedCount>0)
+    //    ctx.body={code:1000,errorMessage:"the user have order the course before"};
+    //else{
         let order=await prepareOrderInfoByCourseId(courseId,userId);
+    console.log('order',order);
         ctx.body = await buy(order);
-    }
+    //}
 });
 function prepareOrderInfoByCourseId(courseId,userId){
     let order={};
     return Course.findOne({id:courseId}).then(course=>{
-        console.log(course);
         return course;
     }).then((course)=>{
         order.user=userId;
@@ -182,7 +182,7 @@ function prepareOrderInfoByCourseId(courseId,userId){
         order.status=0;//未支付
         order.flowno="";//生成order时未涉及支付所以支付宝流水号为空
         order.paymethod="";
-        return course;
+        return order;
     }).catch(error=>{
         return {code:1000,errorMessage:error.message}
     });
