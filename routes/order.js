@@ -75,6 +75,7 @@ function getSign(params) {
     try {
        var privatePem = fs.readFileSync('./pem/app_private.pem');
        var key = privatePem.toString();
+        console.log(key);
        var prestr = getParams(params);
        var crypto = require('crypto');
        var sign = crypto.createSign('RSA-SHA1');
