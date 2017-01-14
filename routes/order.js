@@ -1,11 +1,16 @@
 var router = require('koa-router')();
 var Order = require('../model').Order;
+var Course=require('../model').Course;
+var Token=require('../model').Token;
 var checkLogin = require('../ware/auth.js').checkLogin;
 let fs = require('fs');
 let https = require('https');
 router.get('/order',checkLogin,async (ctx, next) => {
-    let total = await Order.count({user:ctx.user});
-    let orders = await Order.find({user:ctx.user}).sort({paytime:-1}).populate('course');
+    let tokenObj = await Token.findOne({token:ctx.header.token});
+    let userId=tokenObj.user;
+    let total = await Order.count({user:userId});
+    console.log(total);
+    let orders = await Order.find({user:userId}).sort({paytime:-1}).populate('course');
     ctx.body = {code: 0, data: {total, orders}};
 });
 //参考文章  http://www.jb51.net/article/102190.htm
@@ -24,11 +29,11 @@ router.post('/order/sign/alipay', checkLogin,async(ctx, next) => {
         itBPay:"30m",
         showURL:"m.alipay.com"
     };
-    var code = ""
+    var code = "";
     for(var i = 0; i < 4; i++) {
         code += Math.floor(Math.random() * 10);
     }
-    //订单号暂时由时间戳与四位随机码生成
+    //流水号暂时由时间戳与四位随机码生成
     alipayConfig.out_trade_no = Date.now().toString() + code;
     var orderSpec = getParams(alipayConfig);
     var sign = getSign(alipayConfig)
@@ -151,22 +156,37 @@ router.post('/order/notice', checkLogin,async(ctx, next) => {
  * 路径参数说明
  *    course:课程ID
  */
-router.post('/order/:course', checkLogin,async(ctx, next) => {
-    var course = ctx.params.course;
-    let user = ctx.user;
-    var order = ctx.request.body;
-    ctx.body = await buy({
-        course:course,
-        user:user,
-        price:order.price,
-        status:order.status,
-        flowno:order.flowno,
-        paymethod:order.paymethod
-    });
+router.post('/order/:courseId', checkLogin,async(ctx, next) => {
+    var courseId = ctx.params.courseId;
+    let userId=ctx.user;
+    let courseOrderedCount=await Order.count({user:userId,course:courseId}); //按用户和课程查询订单，确认是否重复
+    if(courseOrderedCount>0)
+        ctx.body={code:1000,errorMessage:"the user have order the course before"};
+    else{
+        let order=await prepareOrderInfoByCourseId(courseId,userId);
+        ctx.body = await buy(order);
+    }
 });
-
-function buy(course) {
-    return Order.create(course).then(doc => {
+function prepareOrderInfoByCourseId(courseId,userId){
+    let order={};
+    return Course.findOne({id:courseId}).then(course=>{
+        console.log(course);
+        return course;
+    }).then((course)=>{
+        order.user=userId;
+        order.course=course._id;
+        order.price=course.price;
+        order.paytime=new Date();
+        order.status=0;//未支付
+        order.flowno="";//生成order时未涉及支付所以支付宝流水号为空
+        order.paymethod="";
+        return course;
+    }).catch(error=>{
+        return {code:1000,errorMessage:error.message}
+    });
+}
+function buy(order) {
+    return Order.create(order).then(doc => {
         return {code: 0,data:doc._id};
     }, error => {
         return {code: 1000, errorMessage: error};

@@ -216,7 +216,7 @@
                 <div class="form-group">
                     <label class="control-label col-md-3">课程ID</label>
                     <div class="col-md-6">
-                        <input type="text" name="course" class="form-control" value="0">
+                        <input type="text" name="course" class="form-control" value="5874d2190cb2b82b10b2fcbd">
                     </div>
                 </div>
                 <div class="form-group">
@@ -260,6 +260,22 @@
         <div class="col-md-12">
             <button class="btn btn-primary btn-lg getOrder" type="button">获取订单</button>
             <div style="margin:20px;"><p id="getOrder"></p></div>
+        </div>
+    </div>
+    <div class="row bg">
+        <div class="col-md-12">
+            <form role="form" class="form-horizontal signOrder" onsubmit="SignOrder(event)">
+                <div class="form-group">
+                    <label class="control-label col-md-3">订单ID</label>
+                    <div class="col-md-6">
+                        <input type="text" name="course" id="signOrderId" class="form-control" value="5874d2190cb2b82b10b2fcbd">
+                    </div>
+                </div>
+                <div class="col-md-12" style="padding-left:0;">
+                    <input type="submit" value="请求签名" class="btn btn-primary btn-lg">
+                </div>
+            </form>
+            <div style="margin:80px;"><p id="signOrder"></p></div>
         </div>
     </div>
 </div>
@@ -390,12 +406,25 @@
         };
         $.ajax(getCourseOpt);
     });
-
-
     $(".getOrder").on("click", function () {
         var getOrderOpt = getOptions("/order", token, null, "GET", "getOrder");
         $.ajax(getOrderOpt);
     });
+    //用户签名
+    $('.signOrder').on("click",function(){
+        var orderId=$("#signOrderId").val();
+        var getCourseOpt={
+            url:`/order/sign/alipay?${orderId}`,
+            headers: {
+                "token": token
+            },
+            dataType: "json",
+            success: function (data) {
+                $("#signOrder").text(JSON.stringify(data));
+
+            }
+        }
+    })
 
 </script>
 </html>
