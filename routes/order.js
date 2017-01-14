@@ -6,6 +6,7 @@ var checkLogin = require('../ware/auth.js').checkLogin;
 let fs = require('fs');
 let https = require('https');
 router.get('/order',checkLogin,async (ctx, next) => {
+    console.log('orderId');
     let tokenObj = await Token.findOne({token:ctx.header.token});
     let userId=tokenObj.user;
     let total = await Order.count({user:userId});
@@ -15,8 +16,9 @@ router.get('/order',checkLogin,async (ctx, next) => {
 });
 //参考文章  http://www.jb51.net/article/102190.htm
 //参考文档 https://doc.open.alipay.com/docs/doc.htm?spm=a219a.7629140.0.0.nNOmiW&treeId=204&articleId=105297&docType=1
-router.post('/order/sign/alipay', checkLogin,async(ctx, next) => {
-    let orderId = req.query.orderId;
+router.get('/order/sign/alipay', checkLogin,async(ctx, next) => {
+    let orderId = ctx.query.orderId;
+    console.log('orderId',orderId);
     let orderVo = await Order.findById(orderId).populate('course');
     let alipayConfig = {
         subject:orderVo.course.name,

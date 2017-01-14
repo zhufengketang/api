@@ -411,19 +411,20 @@
         $.ajax(getOrderOpt);
     });
     //用户签名
-    $('.signOrder').on("click",function(){
+    $('.signOrder').on("click",function(event){
+        event.preventDefault() || (event.returnValue = false);//阻止表单提交的页面刷新行为
         var orderId=$("#signOrderId").val();
-        var getCourseOpt={
-            url:`/order/sign/alipay?${orderId}`,
+        var getOrderOpt={
+            url:`/order/sign/alipay?orderId=${orderId}`,
             headers: {
                 "token": token
             },
             dataType: "json",
             success: function (data) {
                 $("#signOrder").text(JSON.stringify(data));
-
             }
         }
+        $.ajax(getOrderOpt);
     })
 
 </script>
