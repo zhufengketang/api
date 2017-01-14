@@ -83,7 +83,7 @@ function getSign(params) {
        return encodeURIComponent(sign);
     } catch(err) {
         console.log('veriSign err', err)
-    }
+    } 
 }
 //将支付宝发来的数据生成有序数列
 function getVerifyParams(params) {
