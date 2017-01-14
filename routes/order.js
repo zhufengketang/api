@@ -73,7 +73,7 @@ function getParams(params){
 
 function getSign(params) {
     try {
-       var privatePem = fs.readFileSync('./rsa_private_key.pem');
+       var privatePem = fs.readFileSync('./pem/app_private.pem');
        var key = privatePem.toString();
        var prestr = getParams(params);
        var crypto = require('crypto');
@@ -111,7 +111,7 @@ function getVerifyParams(params) {
 //验签
 function veriySign(params) {
     try {
-        var publicPem = fs.readFileSync('./rsa_public_key.pem');
+        var publicPem = fs.readFileSync('./pem/alipay_public.pem');
         var publicKey = publicPem.toString();
         var prestr = getVerifyParams(params);
         var sign = params['sign'] ? params['sign'] : "";
