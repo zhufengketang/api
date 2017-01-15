@@ -13,6 +13,7 @@ let send = require('../sms');
 var uuid = require('uuid');
 var vcode = require('../utils').vcode;
 let crypto = require('crypto');
+var checkLogin = require('../ware/auth.js').checkLogin;
 var app_secret=process.env.secret || "zhufengketang";
 
 /**
@@ -50,6 +51,26 @@ router.post('/user',mustHaveToken, async function (ctx, next) {
     }
 
 });
+/**
+ *  mobile : "18611223344",
+ *  password : "abcdefg",
+ *  imgcode : "123456", //图片校验码
+ *  vcode : "123456" //验证码
+ */
+router.put('/user',checkLogin,async function (ctx, next) {
+  let mobile = ctx.query.mobile;
+  let imgcode = ctx.query.imgcode;
+  let vcode = ctx.query.vcode;
+  let result = await VCode.find({token:ctx.header.token,vcode})
+  if(result){
+      let password=crypto.createHmac('sha1', app_secret).update(ctx.query.password).digest('base64');
+      let updateResult = await User.update({mobile},{password});
+      console.log('updateResult',updateResult);
+      ctx.body = {code: 0,data:null};
+  }else{
+      ctx.body = {code: 1000};
+  }
+});
 
 /**
  * 用户登录
@@ -61,6 +82,7 @@ router.get('/user/identity',mustHaveToken, async function (ctx, next) {
     let user = await User.findOne({mobile,password});
     if(user){
         var result = await Token.update({token},{user:user._id});
+        console.log('result',result);
         ctx.body = {code: 0,data:user};
     }else{
         ctx.body = {code: 201};
@@ -79,10 +101,17 @@ router.get('/user/identity',mustHaveToken, async function (ctx, next) {
 router.get('/user/vcode', mustHaveToken, async function (ctx, next) {
     let mobile = ctx.query.mobile;
     let img_code = ctx.query.img_code;
+    let type = ctx.query.type;
     let result =  await ImgCode.find({token:ctx.header.token,code:img_code});
     if(result){
         let code = vcode();
-        result = await send(code,mobile);
+        let sign_name = '注册验证';
+        let template_code = 'SMS_34950592';
+        if(type == 'forget'){
+            sign_name = '变更验证';
+            template_code = 'SMS_34950590';
+        }
+        result = await send(code,mobile,sign_name,template_code);
         if(result =='success'){
             result = await VCode.create({token:ctx.header.token,code});
            ctx.body = {code: 0,data:{mobile,img_code,code}}
@@ -107,7 +136,6 @@ router.get('/imgcode',mustHaveToken, async function (ctx, next) {
     var codeAry = captcha.get();
     var codeStr = codeAry[0];
     var imgBuf = codeAry[1];
-    console.log(codeStr);
     await ImgCode.create({token:ctx.header.token,code:codeStr});
     ctx.body = imgBuf;
 });

@@ -7,15 +7,15 @@ var client = new TopClient({
 
 
 
-module.exports = function(code,mobile){
+module.exports = function(code,mobile,sign_name,template_code){
     return new Promise(function(resolve,reject){
         client.execute( 'alibaba.aliqin.fc.sms.num.send' , {
             'extend' : '' ,
             'sms_type' : 'normal' ,
-            'sms_free_sign_name' : '注册验证' ,
+            'sms_free_sign_name' : sign_name ,
             'sms_param' : "{code:'"+code+"',product:'珠峰课堂'}" ,
             'rec_num' : mobile ,
-            'sms_template_code' : "SMS_34950592"
+            'sms_template_code' : template_code
         }, function(error, response) {
             if(error){
                 console.error(error);
