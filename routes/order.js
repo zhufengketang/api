@@ -64,9 +64,9 @@ function getParams(params){
     for(var i2=0;i2<sPara.length;i2++){
         var obj = sPara[i2];
         if(i2 == sPara.length -1){
-            prestr = prestr + obj[0]+'="'+obj[1]+'"';
+            prestr = prestr + obj[0]+'='+obj[1]+'';
         }else{
-            prestr = prestr + obj[0]+'="'+obj[1]+'"&';
+            prestr = prestr + obj[0]+'='+obj[1]+'&';
         }
     }
     return prestr;
