@@ -23,7 +23,7 @@ router.get('/order/sign/alipay', checkLogin,async(ctx, next) => {
     let alipayConfig = {
         partner : "2088221872110871",
         seller_id : "1144709265@qq.com",
-        subject:orderVo.course.name,
+        subject:orderVo.course.title,
         body:orderVo.course.description,
         total_fee:orderVo.course.price,
         notify_url:'https://ketang.zhufengpeixun.cn/order/notice',
