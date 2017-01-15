@@ -42,7 +42,7 @@ router.get('/order/sign/alipay', checkLogin,async(ctx, next) => {
     var orderSpec = getParams(alipayConfig);
     var sign = getSign(alipayConfig)
     ctx.body = {
-        code:1000,
+        code:0,
         data:{
             orderSpec,
             sign
