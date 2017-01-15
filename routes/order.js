@@ -21,15 +21,17 @@ router.get('/order/sign/alipay', checkLogin,async(ctx, next) => {
     console.log('orderId',orderId);
     let orderVo = await Order.findById(orderId).populate('course');
     let alipayConfig = {
+        partner : "2088221872110871",
+        seller_id : "1144709265@qq.com",
         subject:orderVo.course.name,
         body:orderVo.course.description,
-        totalFee:orderVo.course.price,
-        notifyURL:'https://ketang.zhufengpeixun.cn/order/notice',
+        total_fee:orderVo.course.price,
+        notify_url:'https://ketang.zhufengpeixun.cn/order/notice',
         service:"mobile.securitypay.pay",
-        paymentType:"1",
-        inputCharse:"utf-8",
-        itBPay:"30m",
-        showURL:"m.alipay.com"
+        payment_type:"1",
+        input_char_set:"utf-8",
+        it_b_pay:"30m",
+        show_url:"m.alipay.com"
     };
     var code = "";
     for(var i = 0; i < 4; i++) {
