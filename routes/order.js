@@ -41,7 +41,7 @@ router.get('/order/sign/alipay', checkLogin,async(ctx, next) => {
     alipayConfig.out_trade_no = Date.now().toString() + code;
 
     var orderSpec = getPayParams(alipayConfig);
-    var sign = getSign(orderSpec)
+    var sign = getPaySign(orderSpec)
     ctx.body = {
         code:0,
         data:{
