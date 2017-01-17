@@ -83,9 +83,11 @@ router.get('/user/identity',mustHaveToken, async function (ctx, next) {
     if(user){
         var result = await Token.update({token},{user:user._id});
         console.log('result',result);
-        ctx.body = {code: 0,data:user};
+        ctx.body = {code: 0,data:{
+            name:user.name
+        }};
     }else{
-        ctx.body = {code: 201};
+        ctx.body = {code: 1000,errorMessage : "用户名或密码错误"};
     }
 
 });

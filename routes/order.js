@@ -9,10 +9,29 @@ router.get('/order',checkLogin,async (ctx, next) => {
     console.log('orderId');
     let tokenObj = await Token.findOne({token:ctx.header.token});
     let userId=tokenObj.user;
-    let total = await Order.count({user:userId});
-    console.log(total);
-    let orders = await Order.find({user:userId}).sort({paytime:-1}).populate('course');
-    ctx.body = {code: 0, data: {total, orders}};
+   // let total = await Order.count({user:userId});
+   // console.log(total);
+    let orders = await Order.find({user:userId,status:1}).sort({paytime:-1}).populate('course');
+    let total=orders.length;
+    let orderInfos=[];
+    for(let i=0;i<orders.length;i++){
+        let order=orders[i];
+        await Course.findById(order.course)
+            .then((course)=>{
+                let orderInfo={
+                    id:order._id,
+                    title:course.title,
+                    author:course.author,
+                    description : course.description,
+                    price : course.price,
+                    start : course.start,
+                    address : course.address,
+                    image : course.image
+                };
+                orderInfos.push(orderInfo);
+            });
+    }
+    ctx.body = {code: 0, data: {total,orderInfos}};
 });
 //参考文章  http://www.jb51.net/article/102190.htm
 //参考文档 https://doc.open.alipay.com/docs/doc.htm?spm=a219a.7629140.0.0.nNOmiW&treeId=204&articleId=105297&docType=1
@@ -125,7 +144,7 @@ function getPaySign(orderInfo) {
         var privatePem = fs.readFileSync('./pem/app_private.pem');
         var key = privatePem.toString();
         console.log(key);
-        var prestr = orderInfo; 
+        var prestr = orderInfo;
         var crypto = require('crypto');
         var sign = crypto.createSign('RSA-SHA1');
         sign.update(prestr);
@@ -133,7 +152,7 @@ function getPaySign(orderInfo) {
         return encodeURIComponent(sign);
     } catch(err) {
         console.log('veriSign err', err)
-    } 
+    }
 }
 
 
@@ -150,7 +169,7 @@ function getSign(params) {
        return encodeURIComponent(sign);
     } catch(err) {
         console.log('veriSign err', err)
-    } 
+    }
 }
 //将支付宝发来的数据生成有序数列
 function getVerifyParams(params) {
@@ -243,7 +262,7 @@ function prepareOrderInfoByCourseId(courseId,userId){
         return course;
     }).then((course)=>{
         order.user=userId;
-        order.course=course._id;
+        order.course=course;
         order.price=course.price;
         order.paytime=new Date();
         order.status=0;//未支付
