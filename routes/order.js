@@ -5,6 +5,9 @@ var Token=require('../model').Token;
 var checkLogin = require('../ware/auth.js').checkLogin;
 let fs = require('fs');
 let https = require('https');
+var format = require('date-format');
+var qs = require("qs")
+
 router.get('/order',checkLogin,async (ctx, next) => {
     console.log('orderId');
     let tokenObj = await Token.findOne({token:ctx.header.token});
@@ -33,6 +36,7 @@ router.get('/order',checkLogin,async (ctx, next) => {
     }
     ctx.body = {code: 0, data: {total,orderInfos}};
 });
+
 //参考文章  http://www.jb51.net/article/102190.htm
 //参考文档 https://doc.open.alipay.com/docs/doc.htm?spm=a219a.7629140.0.0.nNOmiW&treeId=204&articleId=105297&docType=1
 router.get('/order/sign/alipay', checkLogin,async(ctx, next) => {
@@ -40,17 +44,10 @@ router.get('/order/sign/alipay', checkLogin,async(ctx, next) => {
     console.log('orderId',orderId);
     let orderVo = await Order.findById(orderId).populate('course');
     let alipayConfig = {
-        partner : "2088221872110871",
-        seller_id : "1144709265@qq.com",
         subject:orderVo.course.title,
         body:orderVo.course.description,
         total_fee:orderVo.course.price,
-        notify_url:'https://ketang.zhufengpeixun.cn/order/notice',
-        service:"mobile.securitypay.pay",
-        payment_type:"1",
-        input_char_set:"utf-8",
-        it_b_pay:"30m",
-        show_url:"m.alipay.com"
+        notify_url:'https://ketang.zhufengpeixun.cn/order/notice'
     };
     var code = "";
     for(var i = 0; i < 4; i++) {
@@ -59,63 +56,62 @@ router.get('/order/sign/alipay', checkLogin,async(ctx, next) => {
     //流水号暂时由时间戳与四位随机码生成
     alipayConfig.out_trade_no = Date.now().toString() + code;
 
-    var orderSpec = getPayParams(alipayConfig);
-    var sign = getPaySign(orderSpec)
     ctx.body = {
         code:0,
-        data:{
-            orderSpec,
-            sign
-        }
+        data: getOrderSpecAndSign(alipayConfig)
     };
 });
 
-function getPayParams(alipayConfig){
-    // 签约合作者身份ID
-    var orderInfo = "partner=" + "\"" + alipayConfig.partner + "\"";
 
-    // 签约卖家支付宝账号
-    orderInfo += "&seller_id=" + "\"" + alipayConfig.seller_id + "\"";
-
-    // 商户网站唯一订单号
-    orderInfo += "&out_trade_no=" + "\"" + alipayConfig.out_trade_no + "\"";
-
-    // 商品名称
-    orderInfo += "&subject=" + "\"" + alipayConfig.subject + "\"";
-
-    // 商品详情
-    orderInfo += "&body=" + "\"" + alipayConfig.body + "\"";
-
-    // 商品金额
-    orderInfo += "&total_fee=" + "\"" + alipayConfig.total_fee + "\"";
-
-    // 服务器异步通知页面路径
-    orderInfo += "&notify_url=" + "\"" + alipayConfig.notify_url + "\"";
-
-    // 服务接口名称， 固定值
-    orderInfo += "&service=\"mobile.securitypay.pay\"";
-
-    // 支付类型， 固定值
-    orderInfo += "&payment_type=\"1\"";
-
-    // 参数编码， 固定值
-    orderInfo += "&_input_charset=\"utf-8\"";
-
-    // 设置未付款交易的超时时间
-    // 默认30分钟，一旦超时，该笔交易就会自动被关闭。
-    // 取值范围：1m～15d。
-    // m-分钟，h-小时，d-天，1c-当天（无论交易何时创建，都在0点关闭）。
-    // 该参数数值不接受小数点，如1.5h，可转换为90m。
-    orderInfo += "&it_b_pay=\"30m\"";
-
-    // extern_token为经过快登授权获取到的alipay_open_id,带上此参数用户将使用授权的账户进行支付
-    // orderInfo += "&extern_token=" + "\"" + extern_token + "\"";
-
-    // 支付宝处理完请求后，当前页面跳转到商户指定页面的路径，可空
-    orderInfo += "&return_url=\"m.alipay.com\"";
-
-    return orderInfo;
+/**
+ * 通过订单信息获取支付宝(支付签名)
+ * @param alipayConfig
+ * @returns {{orderSpec: *, sign}}
+ */
+function getOrderSpecAndSign (alipayConfig) {
+  const params = getPayParams(alipayConfig);
+  const orderSpec = qs.stringify(params, {encode : false})
+  const orderSpecEncoded = qs.stringify(params, {encode : true})
+  
+  var sign = getPaySign(orderSpec)
+  return {orderSpec : orderSpecEncoded, sign}
 }
+
+
+/**
+ * 组织支付宝支付签名所需参数 
+ * @param alipayConfig
+ * @returns {{app_id: string, biz_content: {timeout_express: string, seller_id: string, product_code: string, total_amount: (*|CourseSchema.price|{type, required}|number|Document.price), subject: *, body: (*|string|string|string|CourseSchema.description|{type, required}), out_trade_no: (string|*)}, charset: string, method: string, notify_url: string, sign_type: string, timestamp: string, version: string}}
+ */
+function getPayParams(alipayConfig){
+
+  //请求参数按照key=value&key=value方式拼接的未签名原始字符串
+  var params = {
+    app_id : "2016101002076612",
+    biz_content : {
+      timeout_express : "30m",
+      seller_id : "",
+      product_code:"QUICK_MSECURITY_PAY",
+      total_amount: alipayConfig.total_fee,
+      subject : alipayConfig.subject,
+      body : alipayConfig.body,
+      out_trade_no : alipayConfig.out_trade_no
+    },
+    charset : "utf-8",
+    method : "alipay.trade.app.pay",
+    notify_url : alipayConfig.notify_url,
+    sign_type:"RSA",
+    timestamp : format.asString('yyyy-MM-dd hh:mm:ss', new Date()),
+    version:"1.0"
+  }
+
+  params.biz_content = JSON.stringify(params.biz_content)
+
+  return params
+}
+
+
+
 
 function getParams(params){
     var sPara = [];
