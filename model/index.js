@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var uuid = require('uuid');
 var ObjectId = mongoose.Schema.Types.ObjectId;
 mongoose.Promise = Promise;
-mongoose.connect('mongodb://123.57.223.74/zhufengketang');
+mongoose.connect('mongodb://zhufeng:zfpx2017@127.0.0.1:2017/zhufengketang');
 //课程
 var CourseSchema = new mongoose.Schema({
     id: {type: ObjectId, required: false},//id
