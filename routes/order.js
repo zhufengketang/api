@@ -141,7 +141,7 @@ function getParams(params){
 
 function getPaySign(orderInfo) {
     try {
-        var privatePem = fs.readFileSync('./pem/app_private.pem');
+        var privatePem = fs.readFileSync('./pem/rsa_private_key.pem');
         var key = privatePem.toString();
         console.log(key);
         var prestr = orderInfo;
