@@ -4,3 +4,5 @@ node_modules
 npm-debug.log
 .pem
 /pem
+config.js
+setting.js

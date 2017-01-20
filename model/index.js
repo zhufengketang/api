@@ -2,7 +2,8 @@ var mongoose = require('mongoose');
 var uuid = require('uuid');
 var ObjectId = mongoose.Schema.Types.ObjectId;
 mongoose.Promise = Promise;
-mongoose.connect('mongodb://zhufeng:zfpx2017@127.0.0.1:2017/zhufengketang');
+let url = require('../setting').url;
+mongoose.connect(url);
 //课程
 var CourseSchema = new mongoose.Schema({
     id: {type: ObjectId, required: false},//id
