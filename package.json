@@ -21,6 +21,7 @@
     "koa-router": "^7.0.0",
     "koa-static": "^2.0.0",
     "koa-views": "^5.2.0",
+    "mocha": "^3.2.0",
     "mongoose": "^4.7.4",
     "qs": "^6.3.0",
     "request-promise": "^4.1.1",
@@ -32,6 +33,7 @@
   },
   "devDependencies": {
     "request": "^2.79.0",
-    "sails-memory": "^0.10.7"
+    "sails-memory": "^0.10.7",
+    "should": "^11.1.2"
   }
 }
