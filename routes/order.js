@@ -160,8 +160,8 @@ function getSign(params) {
 
 
 //收款通知
-router.get('/order/notice', async(ctx, next) => {
-  var params = ctx.query;
+router.post('/order/notice', async(ctx, next) => {
+  var params = ctx.params;
 
   console.log("@/order/notice")
   console.log(params)
