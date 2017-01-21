@@ -163,7 +163,12 @@ function getSign(params) {
 router.post('/order/notice', checkLogin,async(ctx, next) => {
   var params = req.body;
 
+  console.log("@/order/notice")
+  console.log(params)
+
   if(verifyAlipaySign(params)) {
+
+    console.log("verify ok")
     const {trade_status} = params
     
     // 支付成功 处理订单逻辑
