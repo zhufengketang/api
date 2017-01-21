@@ -161,7 +161,7 @@ function getSign(params) {
 
 //收款通知
 router.post('/order/notice', async(ctx, next) => {
-  var params = ctx.params;
+  var params = ctx.request.body; 
 
   console.log("@/order/notice")
   console.log(params)
