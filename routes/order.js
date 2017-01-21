@@ -175,10 +175,9 @@ router.post('/order/notice', async(ctx, next) => {
     if(trade_status === "TRADE_SUCCESS") {
       console.log("pay success")
       const order = await Order.findOne({flowno : params.out_trade_no})
-      const result = Order.update({_id : order.id}, {$set : {status : 1}})
+      const result = await Order.update({_id : order._id}, {$set : {status : 1}})
       ctx.body = "success"
 
-      ///TODO
     }
 
   }else{
