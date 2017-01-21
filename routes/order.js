@@ -172,7 +172,7 @@ router.post('/order/notice', async(ctx, next) => {
     const {trade_status} = params
     
     // 支付成功 处理订单逻辑
-    if(trade_status === "TRADE_SUCESS") {
+    if(trade_status === "TRADE_SUCCESS") {
       console.log("pay success")
       const order = await Order.findOne({flowno : params.out_trade_no})
       const result = Order.update({_id : order.id}, {$set : {status : 1}})
