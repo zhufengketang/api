@@ -10,4 +10,4 @@ router.get("/",async (ctx,next)=>{
 });
 
 
-module.exports = ROUTER;
+module.exports = router;

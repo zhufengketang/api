@@ -8,7 +8,7 @@ let https = require('https');
 var format = require('date-format');
 var qs = require("qs")
 
-var {getAlipayPaySign, verifyAlipaySign} = require("..util/alipay_signer")
+var {getAlipayPaySign, verifyAlipaySign} = require("../util/alipay_signer")
 
 router.get('/order',checkLogin,async (ctx, next) => {
   console.log('orderId');
