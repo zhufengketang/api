@@ -72,12 +72,16 @@ const verifyAlipaySign = (params) => {
     const content = sorted_params
       .map(arr => arr[0] + "=" + arr[1])
       .reduce((x, y) => x + "&" + y)
+
+    console.log(content)
     
 
     var publicPem = fs.readFileSync(path.resolve(__dirname , '../pem/alipay_public.pem'));
     var publicKey = base64toPem(publicPem.toString());
     var verify = crypto.createVerify('RSA-SHA1');
-    verify.update(content);
+    verify.update(new Buffer(content, 'utf-8'));
+    console.log(publicKey)
+    console.log(sign)
     return verify.verify(publicKey, sign, 'base64')
   } catch(err) {
     console.log('veriSign err', err)
