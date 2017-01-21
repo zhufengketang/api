@@ -182,7 +182,7 @@ router.get('/order/notice', async(ctx, next) => {
     }
 
   }else{
-    console.log("alipay notify sign error :" +JSON.stringify(req.body))
+    console.log("alipay notify sign error :" +JSON.stringify(ctx.body))
     ctx.body = 'failure'
   }
 
