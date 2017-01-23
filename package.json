@@ -5,6 +5,7 @@
   "scripts": {
     "start": "node --harmony-async-await   bin/www",
     "client": "node --harmony-async-await client.js",
+    "test":"mocha --harmony-async-await ./test/user.test.js",
     "pm2": "pm2 start bin/run "
   },
   "dependencies": {
@@ -33,8 +34,10 @@
   },
   "devDependencies": {
     "chai": "^3.5.0",
+    "mocha": "^3.2.0",
     "request": "^2.79.0",
     "sails-memory": "^0.10.7",
-    "should": "^11.1.2"
+    "should": "^11.1.2",
+    "supertest": "^2.0.1"
   }
 }

@@ -2,8 +2,8 @@ var mongoose = require('mongoose');
 var uuid = require('uuid');
 var ObjectId = mongoose.Schema.Types.ObjectId;
 mongoose.Promise = Promise;
-let url = require('../setting').url;
-mongoose.connect(url);
+let setting = require('../setting');
+mongoose.connect(setting.url,setting.options);
 //课程
 var CourseSchema = new mongoose.Schema({
     id: {type: ObjectId, required: false},//id
