@@ -16,7 +16,6 @@ const host = 'http://localhost:2701';
 
 
 let testToken = "";
-let imageCode = "";
 let code = "";
 describe('test:token and imageCode', function () {
     it('should get a token', (done)=> {
@@ -39,22 +38,20 @@ describe('test:token and imageCode', function () {
     //            done();
     //        })
     //});
-    it('ask for imageCode',()=>{
+});
+
+describe('test:getvcode',function(){
+    let imageCode = "";
+    it('ask for imageCode',(done)=>{
         request(host)
             .get("/imgCode")
             .set("token", testToken)
             .end(function(err,result){
-            })
-    } );
-});
-
-describe('test:get imageCode and vcode',function(){
-    it('get imageCode from database',async ()=>{
-        const imageCodes=await ImgCode.find({token:testToken});
-        console.log('imageCodes',testToken,imageCodes);
-        if(imageCodes.length>0){
-            imageCode=imageCodes[imageCodes.length-1].code;
-        }
+                ImgCode.findOne({token:testToken}).then((doc)=>{
+                    imageCode=doc.code;
+                    done();
+                })
+            });
     });
     it("get register vcode",(done)=> {
         const mobileCode = 15210938964;
@@ -69,4 +66,4 @@ describe('test:get imageCode and vcode',function(){
                 done();
             });
     })
-})
+});
