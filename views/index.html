@@ -343,7 +343,7 @@
                 if (url == "/token") {
                     token = res.token;
                 }
-                let str = JSON.stringify(res, null, 4);
+                var str = JSON.stringify(res, null, 4);
                 $(`#${identifier}`).html(str);
             },
             error: function (XMLHttpRequest, textStatus, error) {
@@ -373,7 +373,7 @@
     function submitOrder(event) {
         event.preventDefault() || (event.returnValue = false);
         var requestBody = $("#order").serialize();
-        let course = $("#order").find('input[name=course]').val();
+        var course = $("#order").find('input[name=course]').val();
         var createOrderOpt = getOptions(`/order/${course}`, token, requestBody, "POST", "createOrder");
         $.ajax(createOrderOpt);
     }
@@ -406,9 +406,9 @@
     })
 
     $(".getVcode").on("click", function () {
-        let mobile = document.querySelector('#mobilePhone').value;
-        let img_code = document.querySelector('#inputImgCode').value;
-        let type = document.querySelector('#msgType').value;;
+        var mobile = document.querySelector('#mobilePhone').value;
+        var img_code = document.querySelector('#inputImgCode').value;
+        var type = document.querySelector('#msgType').value;;
         var requestBody = {mobile: mobile, type, img_code: img_code};
         var vcodeOpt = getOptions("/user/vcode", token, requestBody, "GET", "vcode");
         $.ajax(vcodeOpt);
@@ -416,10 +416,10 @@
 
     function submitChangePassword(){
         event.preventDefault() || (event.returnValue = false);
-        let changePasswordForm = document.querySelector('#changePasswordForm');
-        let vcode = $('#changePasswordForm').find('input[name=vcode]').val();
-        let mobile = $('#changePasswordForm').find('input[name=mobile]').val();
-        let password = $('#changePasswordForm').find('input[name=password]').val();
+        var changePasswordForm = document.querySelector('#changePasswordForm');
+        var vcode = $('#changePasswordForm').find('input[name=vcode]').val();
+        var mobile = $('#changePasswordForm').find('input[name=mobile]').val();
+        var password = $('#changePasswordForm').find('input[name=password]').val();
         console.log(vcode,mobile,password);
         var requestBody = {};
         var changePasswordOpt = getOptions(`/user?vcode=${vcode}&mobile=${mobile}&password=${password}`, token, requestBody, "PUT", "changePassword");
@@ -428,9 +428,9 @@
 
     function submitIdentity() {
         event.preventDefault() || (event.returnValue = false);
-        let identityForm = document.querySelector('#identityForm');
-        let mobile = $('#identityForm').find('input[name=mobile]').val();
-        let password = $('#identityForm').find('input[name=password]').val();
+        var identityForm = document.querySelector('#identityForm');
+        var mobile = $('#identityForm').find('input[name=mobile]').val();
+        var password = $('#identityForm').find('input[name=password]').val();
         var requestBody = {mobile, password};
         var userIdentityOpt = getOptions("/user/identity", token, requestBody, "GET", "identyUser");
         $.ajax(userIdentityOpt);
@@ -440,8 +440,8 @@
     var courses = [];
 
     $(".getCourse").on("click", function () {
-        let start = 0;
-        let take = 100;
+        var start = 0;
+        var take = 100;
         var getCourseOpt = {
             url: `/course?start=${start}&take=${take}`,
             headers: {

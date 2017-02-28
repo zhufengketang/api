@@ -4,6 +4,8 @@ const convert = require('koa-convert');//将koa1的中间封装为koa2的中间�
 const bodyParser = require('koa-bodyparser');
 const logger = require('koa-logger');//在控制台输出日志
 const views = require("koa-views");//配置koa的模版引擎
+const cors = require("koa-cors");
+app.use(convert(cors()));
 app.use(convert(bodyParser()));
 app.use(convert(logger()));
 app.use(convert(require("koa-static")(__dirname+"/public")));//静态文件地址
